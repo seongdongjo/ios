@@ -1,0 +1,273 @@
+swift 변수사용법
+
+//상수
+//let a: Int = 100
+let a: Int = 100
+
+a = 200 //에러난다(상수니까 안변한다)
+    
+//변수
+//var 변수명: 데이터 타입 = 값
+var b: Int = 200
+    
+//변수타입
+var someInt: Int = -100
+someInt = 100 //부호가 잇든없든 가능
+someInt = 1.1 //에러가 난다
+    
+//UInt (부호없는정수형)
+var someUInt: UInt = 200
+someUnit = -200 //에러가난다    
+
+//Float
+var someFloat: Float = 1.1
+someFloat = 1 //에러가안난다
+print(someFloat) // 1.0
+    
+//Double
+var someDouble: Double = 1.1
+someDouble = 1
+
+//Bool
+var someBool: Bool = true
+someBool = false
+
+//Character
+var someCharacter: Character = "가"
+someCharacter = "A"
+    
+//String
+var someString: String = "안녕하세요"
+
+//타입추론 -> 자동으로 변수타입을 판단해준다 즉, 변수타입생략가능
+var number = 100
+
+--------------------------------------------------
+//컬렉션타입 -> 데이터들의 집합묶음
+
+Array -> 데이터 타입의 값들을 순서대로 지정하는 리스트
+Dictionary -> 순서없이 키와 값(value) 한 쌍으로 데이터를 저장하는 컬렉션타입
+Set -> 같은 데이터 타입의 값을 순서없이 저장하는 리스트(중복xxx)
+
+//순서대로 담긴다
+var numbers: Array<Int> = Array<Int>()
+numbers.append(1)
+numbers.append(2)
+numbers[0]
+numbers[1]
+
+//중간삽입
+numbers.insert(4,at:0)  //0번째 요소애 4를 삽입
+[4,1,2] //이렇게 뒤로밀린다
+
+//삭제
+numbers.remove(at: 0)
+numbers //출력
+
+//간단하게 생성
+var names = [String]()
+var names = [String] = []
+
+//딕셔너리
+var dic: Dictionary<String, Int> = Dictionary<String, Int>()
+//간단하게
+var dic: [String: Int] = [:]
+var dic: [String: Int] = ["권태안" : 1]
+dic["김철수"] = 3 //키값은 김철수 값은 3
+dic //출력 -> ["권태안":1,김철수":3]
+
+dic["김민지"] = 6 //값변경
+dic.removeValue(forKey: "김민지") //삭제
+
+//세트는 축약형으로 선언할수없어서 그냥 이렇게만 써야한다
+var set: Set = Set<Int>()
+set.insert(10)
+set.insert(20)
+set.insert(20) //중복된값 xxx
+set //순서없이 출력
+
+//삭제(순서가없으니 값으로 삭제)
+set.remove(20)
+    
+========================================================
+#)함수
+func 함수명(파라미터 이름:데이터 타입)->반환타입 {
+    return 반환값
+}
+
+func sum(a: Int, b:Int) -> Int {
+    return a+b
+}
+//호출
+sum(a: 5, b: 3)
+    
+
+func hello() -> String {
+    return "hello"
+}
+//호출
+hello()
+    
+#)반환값이 없는
+func printName() {
+    
+}
+
+func greeting(friend: String, me:String="gunter") {
+    print("Hello, \(friend)! I'm \(me)") //문자열안에 변수사용시 역슬래시사용
+}
+
+greeting(friend: "Albert") //출력: Hello, Albert! I'm gunter
+
+
+#)전달인자 레이블사용(사용자가 명확하게 알수있는게 장점)
+func sendMessage(from myName: String, to name: String) -> String {
+    return "Hello \(name)! I'm \(myName)"
+}
+
+sendMessage(from: "Gunter", to: "Json") //출력: Hello Json! I'm gunter
+
+    
+//가변매개변수
+func sendMessage(me: String, friends: String...) //이렇게 점을 붙이면 가변매개변수다.(배열이 넘어온다고 생각)
+    -> String {
+    return "Hello \(friends)! I'm \(me)"
+}
+
+sendMessage(me: "Gunter", friends: "Json", "Albert", "Stella") //출력: Hello ["Json","Albert","Stella"]! I'm Gunter
+
+========================================
+#)조건문
+let age = 20
+if age < 19 {
+    print("미성년자 입니다.")
+}
+
+----------
+if age < 19 {
+    print("미성년자")
+}
+else {
+    print("성년자")
+}
+
+---------
+let animal = "cat"
+if animal == "dog" {
+    print("강아지 사료 주기")
+}
+else if animal == "cat" {
+    print("고양이 사료 주기")
+}
+else {
+    print("해당하는 동물 사료가 없음")
+}
+=======================================
+#)switch
+let color = "green"
+switch color {
+    case "blue" :
+        print("파란색입니다.")
+    case "green":
+        print("초록색입니다")
+    case "yellow":
+        print("노란색 입니다")
+    default:
+        print("찾는색상이 없습니다")
+}
+
+-------------------
+let temperature = 30
+switch temperature {
+    case -20...9:
+        print("겨울입니다")
+    case 10...14:
+        print("가을입니다")
+    case 15...25:
+        print("봄 입니다")
+    case 26...35:
+        print("여름입니다")
+    default:
+        print("이상기후입니다")
+}
+-------------------
+#)반복문
+
+for i in 1...4 {
+       print(i)
+}
+
+-------------------
+let array=[1,2,3,4,5]
+
+for i in array {
+    print(i)
+}
+
+-----------------------
+var number = 5
+
+while number < 10 { 
+    number+=1
+}
+
+number값이 10이된다
+
+------------------------
+var x = 6
+
+repeat { //적어도 1번은 반드시 실행된다(조건이 안맞아도)
+    x+=2
+}while x<5 //일때 실행
+
+print(x) //8이 출력된다
+
+------------------------
+#)옵셔널(값이 있을수도있고 없을수도있다)
+
+var name: String? //이렇게 선언하면 초기값을 지정하지 않더라도 null인 nil이 들어가게된다 name은 옵셔널변수가 되는것이다
+
+var optionalName: String? = "Gunter" 
+print(optionalName) //출력: Optional("Gunter") 이말은 Gunter문자열이 옵셔널이라는 포장지로 감싸져있다는 말이다 -> 포장지를 벗기지않으면 일반타입과 연산, 선언할수없다
+var requiredName: String = optionalName //이렇게 하면 에러난다. requiredName변수는 옵셔널변수가 아니기때문이다. 즉 타입이다르다
+
+------------------------
+#)옵셔널해제 방법
+1) 명시적 해제 첫번째방법(강제해제) //이방법은 위험하다 만약에 값이 nil인 옵셔널을 강제해제하면 프로그램이 에러가난다
+
+var number: Int? = 3
+print(number) //출력: Optional(3)
+print(number!) //출력: 3 (강제해제)
+
+2) 명시적해제 두번째방법(비강제해제) -> if로 바인딩을 하면 if문안에서만 추출된 변수를 쓸쑤잇다 그래서 3번째 가드방법을 쓴다
+if let result = number { //number는 위에서 선언된 옵셔널변수를 써야한다
+    print(result) //옵셔널을 추출해서 할당받은 result
+    //출력: 3 (포장지가 벗겨졌다)
+} else {
+    //값 추출 실패시 실행
+}
+
+3) 세번째방법(가드문) 
+func test() {
+    let number: Int? = 5
+    guard let result = number else {return}
+    print(result)
+}
+
+test() //출력: 5
+
+--------------------------
+#)묵시적 해제 -> 컴파일이 자동으로 해제
+let value: Int? = 6
+if value == 6 { 
+    print("value가 6입니다.")
+} else {
+    print("value가 6이 아닙니다.")
+}
+//출력: value가 6입니다 -> 옵셔널값을 비교연산으로 다른값과 비교하면 자동으로 포장지를 벗겨주기때문에 if절이실행된다
+
+#)묵시적 두번째방법(옵셔널해제)
+let string = "12"
+var stringToInt: Int! = Int(string) //문자열을 정수로 바꿔주는데 만약에 문자열에 숫자가아닌 한글,문자등이 들어가면 nil을 반환하기때문에 이렇게 옵셔널로 선언해야한다
+print(stringToInt + 1) //13
+ 
