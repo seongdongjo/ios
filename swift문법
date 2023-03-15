@@ -5,16 +5,16 @@ swift 변수사용법
 let a: Int = 100
 
 a = 200 //에러난다(상수니까 안변한다)
-    
+   
 //변수
 //var 변수명: 데이터 타입 = 값
 var b: Int = 200
-    
+   
 //변수타입
 var someInt: Int = -100
 someInt = 100 //부호가 잇든없든 가능
 someInt = 1.1 //에러가 난다
-    
+   
 //UInt (부호없는정수형)
 var someUInt: UInt = 200
 someUnit = -200 //에러가난다    
@@ -23,7 +23,7 @@ someUnit = -200 //에러가난다
 var someFloat: Float = 1.1
 someFloat = 1 //에러가안난다
 print(someFloat) // 1.0
-    
+   
 //Double
 var someDouble: Double = 1.1
 someDouble = 1
@@ -35,7 +35,7 @@ someBool = false
 //Character
 var someCharacter: Character = "가"
 someCharacter = "A"
-    
+   
 //String
 var someString: String = "안녕하세요"
 
@@ -88,7 +88,7 @@ set //순서없이 출력
 
 //삭제(순서가없으니 값으로 삭제)
 set.remove(20)
-    
+   
 ========================================================
 #)함수
 func 함수명(파라미터 이름:데이터 타입)->반환타입 {
@@ -100,17 +100,17 @@ func sum(a: Int, b:Int) -> Int {
 }
 //호출
 sum(a: 5, b: 3)
-    
+   
 
 func hello() -> String {
     return "hello"
 }
 //호출
 hello()
-    
+   
 #)반환값이 없는
 func printName() {
-    
+   
 }
 
 func greeting(friend: String, me:String="gunter") {
@@ -127,7 +127,7 @@ func sendMessage(from myName: String, to name: String) -> String {
 
 sendMessage(from: "Gunter", to: "Json") //출력: Hello Json! I'm gunter
 
-    
+   
 //가변매개변수
 func sendMessage(me: String, friends: String...) //이렇게 점을 붙이면 가변매개변수다.(배열이 넘어온다고 생각)
     -> String {
@@ -207,7 +207,7 @@ for i in array {
 -----------------------
 var number = 5
 
-while number < 10 { 
+while number < 10 {
     number+=1
 }
 
@@ -227,7 +227,7 @@ print(x) //8이 출력된다
 
 var name: String? //이렇게 선언하면 초기값을 지정하지 않더라도 null인 nil이 들어가게된다 name은 옵셔널변수가 되는것이다
 
-var optionalName: String? = "Gunter" 
+var optionalName: String? = "Gunter"
 print(optionalName) //출력: Optional("Gunter") 이말은 Gunter문자열이 옵셔널이라는 포장지로 감싸져있다는 말이다 -> 포장지를 벗기지않으면 일반타입과 연산, 선언할수없다
 var requiredName: String = optionalName //이렇게 하면 에러난다. requiredName변수는 옵셔널변수가 아니기때문이다. 즉 타입이다르다
 
@@ -247,7 +247,7 @@ if let result = number { //number는 위에서 선언된 옵셔널변수를 써�
     //값 추출 실패시 실행
 }
 
-3) 세번째방법(가드문) 
+3) 세번째방법(가드문)
 func test() {
     let number: Int? = 5
     guard let result = number else {return}
@@ -259,7 +259,7 @@ test() //출력: 5
 --------------------------
 #)묵시적 해제 -> 컴파일이 자동으로 해제
 let value: Int? = 6
-if value == 6 { 
+if value == 6 {
     print("value가 6입니다.")
 } else {
     print("value가 6이 아닙니다.")
@@ -271,3 +271,719 @@ let string = "12"
 var stringToInt: Int! = Int(string) //문자열을 정수로 바꿔주는데 만약에 문자열에 숫자가아닌 한글,문자등이 들어가면 nil을 반환하기때문에 이렇게 옵셔널로 선언해야한다
 print(stringToInt + 1) //13
  
+==========================
+#)구조체
+struct User {
+    var nickname: String
+    var age: Int
+
+    func information() {
+        print("\(nickname) \(age)")
+    }
+}
+
+//User 인스턴스 생성
+var user = User(nickname: "gunter", age: 23)
+
+user.nickname   //실행결과: "gunter"
+user.nickname = "ablert"
+user.nickname   //실행결과: "ablert"
+
+user.information()  //ablert 23
+
+==========================
+#)클래스
+class Dog {
+    var name: String = ""
+    var age: Int = 0
+   
+    //기본생성자
+    init() {
+    }
+   
+    func introduce() {
+        print("name \(name) age\(age)")
+    }
+}
+
+//인스턴스생성
+var dog = Dog()
+dog.name = "CoCo"
+dog.age = 3
+dog.name
+dog.age
+
+dog.introduce()  //name CoCo age 3
+
+=======================================
+#)초기화구문 init
+struct User {
+    var nickname: String = "Gunter"
+    var age: Int = 0
+   
+    init() {
+     //인스턴스가 생성되면 호출
+     //인스턴스 생성시 필요한 설정을 해주는 코드 작성
+     //프로퍼티 초기화 가능
+    }
+}
+
+let user = User() //이때 init호출
+
+======================================
+class User {
+    var nickname: String
+    var age: Int
+   
+    init(nickname: String, age: Int) {
+        self.nickname = nickname
+        self.age = age
+    }
+    init(age: Int) {
+        self.nickname = "ablert"
+        self.age = age
+    }
+   
+    //클래스만가능
+    deinit {
+        print("deint user")
+    }    
+}
+
+var user = User(nickname: "gunter", age: 23)
+user.nickname  // "gunter"
+user.age       //23
+
+var user2 = User(age: 27)
+user2.nickname  //"ablert"
+user2.age        //27
+
+//스위프트는 인스턴스가 더이상필요하지 않으면 자동으로 메모리에서 소멸된다.
+//nil을 넣으면 인스턴스가 더이상 필요하지 않다고 판단해서 deinit이 호출된다.
+var user3 : User? = User(age: 23)
+user3 = nil   //deint user
+
+
+==================================================
+#)프로퍼티
+1. 저장 프로퍼티(인스턴스에 프로퍼티값이 저장된거)
+
+struct Dog {
+    var name: String
+    let gender: String //상수는 값 변경불가
+}
+
+var dog = Dog(name :"gunter", gender: "Male")
+print(dog)  //"Dog(name: "gunter", gender: "Male")\n"
+
+dog.name="권태안"
+dog.gender="Femal" //상수라 에러가 난다
+
+//구조체 변수타입을 상수로 선언하면 내부 프로퍼티도 상수로 다 바뀐다
+let dog2 = Dog(name: "gunter", gender: "male")
+dog2.name = "권태안"  //에러가난다.
+==================================================
+
+#)클래스는 참조타입이여서 가능하다.(구조체는 값 타입)
+class Cat {
+    Var name: String
+    let gender: String
+   
+    init(name: String, gender: String)  {//매개변수로 받고
+        self.name = name
+        self.gender = gender
+    }
+}
+
+let cat = Cat(name: "json", gender: "male")
+cat.name="gunter" //이렇게 let으로 클래스타입을 설정해도 값이 바뀐다.
+cat.gender="female" //상수라 에러난다.
+print(cat.name)
+
+==========================================
+#) 2. 연산형 프로퍼티
+   struct Stock {
+    var averagePrice: Int
+    var quantity: Int
+    var purchasePrice: Int { //이렇게 getter, setter를 통해서 값을 연산하고 프로퍼티에 전달해주는게 연산형프로퍼티이다
+        get {
+            return averagePrice * quantity
+        }
+        set(newPrice) {  
+            averagePrice = newPrice / quantity
+        }
+        //set매개변수 생략시
+        //set {
+        //    averagePrice = newValue / quantity
+        //}
+    }
+}
+
+var stock = Stock(averagePrice: 2300, quantity: 3) //저장프로퍼티
+print(stock) //"Stock(averagePrice: 2300, quantity: 3)\n"
+stock.purchasePrice  //6900
+stock.purchasePrice = 3000   //set코드 실행
+stock.averagePrice  //1000
+
+=======================================
+#) 3. 프로퍼티 옵저버 -> 프로퍼티가 set될때마다 호출
+옵저버에는 두가지가 있는데 값이 저장되기 직전에 호출되는 willSet
+값이 저장된 직후에 호출되는 didSet 옵저버가 있다.
+
+class Account {
+    var credit: Int = 0 {
+        //소괄호 이름 지정
+        willSet {
+            print("잔액이 \(credit)원에서 \(newValue)원으로 변경될 예정입니다.") //매개변수 정하지않으면 자동으로 newValue
+        }
+        didSet {
+            print("잔액이 \(oldValue)원에서 \(credit)원으로 변경되었습니다.") //매개변수 지정하지않으면 자동으로 oldValue
+        }
+    }
+}
+
+var account = Account()
+account.credit = 1000 //잔액이 0원에서 1000원으로 변경될 예정입니다.
+                      //잔액이 0원에서 1000원으로 변경되었습니다.
+                     
+=================================
+#) 타입프로퍼티(인스턴스생성없이 접근)
+struct SomeStructure {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 1
+    }
+}
+
+SomeStructure.computedTypeProperty  //1
+SomeStructure.storedTypeProperty //Some value
+SomeStructure.storedTyleProperty = "hello"
+SomeStructure.storedTypeProperty //hello
+
+================================================
+#)클래스와 구조체 차이점
+클래스
+- 참조타입
+- 상속이가능
+- deinit을 사용하여 클래스 인스턴스의 메모리 할당을 해제할수있다
+- 같은 클래스 인스턴스를 여러개의 변수에 할당한 뒤 값을 변경 시키면 모든 변수에 영향을 준다(메모리가 복사됨)
+
+구조체
+- 값 타입
+- 구조체 변수를 새로운 변수에 할당할 때마다 새로운 구조체가 할당된다
+- 즉 같은 구조체를 여러개의 변수에 할당한 뒤 값을 변경시키더라도 다른 변수에 영향을 주지 않음(값 자체를 복사)
+
+class SomeClass {
+    var count: Int = 0
+}
+
+struct SomeStruct {
+    var count: Int = 0
+}
+
+//같은 클래스인스턴스를 할당한 변수 값을 변경시키면 참조된 인스턴스의 값이 변경된다
+var class1 = SomeClass()
+var class2 = class1
+var class3 = class1
+class3.count = 2
+class1.count //2  -> class3 값을 바꾸었지만 class1도 바뀐것을 확인
+
+
+//구조체 -> 매번새로운 메모리 할당
+var struct1 = SomeStruct()
+var struct2 = struct1
+var struct3 = struct1
+
+struct2.count = 3
+struct3.count = 4
+
+struct1.count  //0
+struct2.count  //3
+struct3.count  //4
+====================================================
+#)상속
+class Vehicle {
+   //final var currentSpeed = 0.0 -> 재정의 할 수없다. override var current ~ 불가능
+    var currentSpeed = 0.0
+    var description: String {
+        return "traveling at \(currentSpeed) miles per hour"
+    }
+    func makeNoise() {
+        print("speaker on")
+    }
+}
+
+//상속받는 클래스 정의하기
+class Bicycle: Vehicle {
+    var hasBasket = false
+}
+
+var bicycle = Bicycle()
+bicycle.currentSpeed  //0 -> 부모값을 가져올수있다
+bicycle.currentSpeed=15.0  //값 변경가능
+
+//오버라이딩
+class Train: Vehicle {
+    override func makeNoise() {
+        super.makeNoise()
+        print("choo choo")
+    }
+}
+
+let train = Train()
+train.makeNoise() // speaker on choo choo -> 필요에따라 super를 붙여서 부모먼저실행 후 본인꺼 실행 가능
+
+======================================================
+#)프로퍼티 오버로딩
+class Car: Vehicle {
+    var gear = 1
+    override var description: String {
+        return super.description + " in gear \(gear)"
+    }
+}
+
+let car = Car()
+car.currentSpeed = 30.0
+car.gear = 2
+print(car.description) // traveling at 30.0 miles per hour in gear 2
+
+======================================================
+class AutomaticCar: Car {
+    override var currentSpeed: Double {
+        didSet {
+            gear = Int(currentSpeed / 10) + 1
+        }
+    }
+}
+let automatic = AutomaticCar()
+automatic.currentSpeed = 35.0  //값을 바꾸는 순간 didSet 실행
+print("AutomaticCar: \(automatic.description)") //AutomaticCar: traveling at 35.0 miles per hour in gear 4
+
+================================================
+#)타입캐스팅
+class MediaItem {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+
+class Movie: MediaItem { //상속
+    var director: String
+    init(name: String, director: String) {
+        self.director = director
+        super.init(name: name)
+    }
+}
+
+class Song: MediaItem {
+    var artist: String
+    init(name: String, artist: String) {
+        self.artist = artist
+        super.init(name: name)
+    }
+}
+
+let library = [
+    Movie(name: "기생충", director: "봉준호"),
+    Song(name: "Butter", artist: "BTS"),
+    Movie(name: "올드보이", diector:"박찬욱"),
+    Song(name: "Wonderwall", artist: "Oasis"),
+    Song(name: "Rain", artist: "이적")
+]
+
+var movieCount=0
+var songCount=0
+
+for item in library {
+    if item is Movie { //is 연산자를 사용해서 타입확인
+        movieCount += 1
+    } else if item is Song {
+        songCount += 1
+    }
+}
+
+print("Media library contains \(moiveCount) movies and \(songCount) songs")
+-> "Media library contains 2 movies and 3 songs"
+
+for item in library {
+    if let movie = item as? Movie { // as? -> 다운캐스팅(option로반환->optional를 꺼내기위해 if문을 썻다), as! -> 다운캐스팅이지만 확실할때 쓰기
+        print("Movie: \(movie.name), dir. \(movie.director)")
+    } else if let song = item as? Song { //다운캐스팅된 타입에 접근
+        print("Song: \(song.name), by \(song.artist)")
+    }
+}
+
+-->출력
+Movie: 기생충, dir. 봉준호
+...
+
+======================================================
+#)assert와 guard
+
+assert
+- 특정조건을 체크하고, 조건이 성립되지 않으면 메시지를 출력하게 할 수 있는 함수
+- assert 함수는 디버깅모드에서만 동작하고 주로 디버깅 중 조건의 검증을 위하여 사용한다
+
+guard문
+- 뭔가를 검사하여 그다음에 오는 코드를 실행할지 말지 결정하는 것
+- guard문에 주어진 조건문이 거짓일 때 구문이 실행됨
+
+var value = 0
+assert(value == 0) // value가 0인지 -> 에러 발생안한다
+
+value = 2
+assert(value == 0, "값이 0이 아닙니다.") // 런타임에러가 발생한다 -> 조건이 성립되지않으면 에러
+
+
+//guarad문
+return or throw or break를 통해 이 후 코드를 실행되지 않도록 한다
+
+func guardTest(value: Int) {
+    guard value == 0 else {return} //value가 0일때만 안녕하세요 출력
+    print("안녕하세요")
+}
+
+guardTest(value: 2) //아무것도 출력안됨 guard문에 막혀서
+
+//guard문을 통해 옵셔널 바인딩
+func guardTest(value: Int?) {
+    guard let value = value else {return}
+    print(value)
+}
+
+guardTest(value: nil) //막혀서 출력이 안된다
+
+==========================================================
+#)프로토콜
+
+protocol SomeProtocol {
+   
+}
+
+protocol SomeProtocol2 {
+
+}
+
+struct SomeStructure: SomeProtocol, Someprotocol2 { //이렇게하면 SomeStructure구조체에 SomeProtocol이 채택된것이다
+   
+}
+
+=====================================
+protocol FirstProtocol {
+    var name: Int {get set}
+    var age: Int {get} //읽기전용
+}
+
+protocol AnotherProtocol {
+    static var someTypeProperty: Int {get set}
+}
+
+protocol FullyNames {
+    var fullName: String {get set}
+    func printFullName()
+}
+
+struct Person: FullyNames {
+    var fullName: String  //프로토콜을 준수하게 fullName을 선언
+    func printFullName() { //프로토콜을 준수하게 함수선언
+        print(fullName)        
+    }
+}
+
+protocol SomeProtocol3 {
+    func someTypeMethod()
+}
+
+protocol SomeProtocol4 {
+    init(someParameter: Int)
+}
+
+
+protocol SomeProtocol5 {
+    init()
+}
+
+class SomeClass: SomeProtocol5 {
+    //클래스에서 프로토콜이 요구하는 생성자를 채택하려면 required선언해야한다
+    required init() {  //상속받지않은 클래스면 required안붙여도된다
+       
+    }
+}
+
+====================================
+#)익스텐션
+extension Int {
+    var isEven: Bool {
+        return self % 2 == 0 //짝수인지 판단
+    }
+   
+    var isOdd: Bool {
+        return self % 2 == 1
+    }
+}
+
+var number = 3
+number.isOdd  //true
+number.isEven //false
+
+-----------------
+extension String {
+    func convertToInt() -> Int? {
+        return Int(self) //문자열을 int타입으로
+    }
+}
+
+var String = "0"
+string.convertToInt() // 0
+
+=====================================
+#)열거형 -> 연관성있는 값들을 모아놓은 것 (enum사용)
+enum CompassPoint {
+    case north
+    case south
+    case east
+    case west
+}
+
+var direction = CompassPoint.east  //east
+direction = .west   //위에서 한번 선언했기때문에 생략가능하다 타입추론을 알아서한다.  -> west
+
+switch direction {
+    case .north:
+        print("north")
+    case .south:
+        print("south")
+    case .east:
+        print("east")
+    case .west:
+        print("west") //이게 출력된다 (위에서 west로 선언했으니)
+}
+
+======================================
+enum CompassPoint: String { //원시값선언가능 -> rawValue로 출력가능
+    case north ="북"
+    case south ="남"
+    case east = "동"
+    case west ="서"
+}
+
+var direction = CompassPoint.east  //east
+direction = .west   //위에서 한번 선언했기때문에 생략가능하다 타입추론을 알아서한다.  -> west
+
+switch direction {
+    case .north:
+        print(direction.rawValue)
+    case .south:
+        print(direction.rawValue)
+    case .east:
+        print(direction.rawValue)
+    case .west:
+        print(direction.rawValue) //서
+}
+
+let direction2 = CompassPoint(rawValue: "남") //CompassPoint인스턴스생성 -> direction2 상수에 south가 들어간다
+
+//핸드폰 에러를 정의하는 열거
+enum PhoneError {
+    case unknown
+    case batteryLow(String) //연관값
+}
+
+let error = PhoneError.batteryLow("배터리가 곧 방전됩니다.") //batteryLow("배터리가 곧 방접됩니다.")
+
+switch error {
+    case .batteryLow(let message) //연관값을 넘겨받기위해 let선언
+        print(message)
+
+
+    case .unknown:
+        print("알수없는 에러입니다")
+}
+
+======================
+#)옵셔널 체이닝
+옵셔널에 속해있는 nil일지도 모르는 프로퍼티, 메서드, 서브스크립션 등을 가져오거나 호출할 때 사용할 수 있는 일련의 과정
+
+struct Developer {
+    let name: String
+}
+
+struct Company {
+    let name: String
+    var developer: Developer?
+}
+
+var company = Company(name: "Gunter", developer: nil)
+print(company.developer) //nil
+
+-------------------
+struct Developer {
+    let name: String
+}
+
+struct Company {
+    let name: String
+    var developer: Developer?
+}
+
+var developer = Developer(name: "han")
+var company = Company(name: "Gunter", developer: developer)
+print(company.developer) //옵셔널로 감싸진 developer출력
+print(company.developer.name) //에러가 난다. -> developer는 옵셔널로 감싸져있어서 접근이 불가능
+
+//이렇게 옵셔널 바인딩없이 옵셔널 체이닝을 이용하면 쉽게 값을 접근 할수있다
+print(company.developer?.name) //Optional("han") -> 값이 nil일수도있어서 옵셔널로 감싸짐
+print(company.developer!.name)// han
+
+=====================================
+#) try~catch
+
+enum PhoneError: Error {
+    case unknown
+    case batteryLow(batteryLevel: Int) //연관갑설정
+}
+
+throw PhoneError.batteryLow(batteryLevel: 20)  //throw구문에서 에러발생
+
+func checkPhoneBatteryStatus(batteryLevel: Int) throws -> String{ //반환값이 String
+    guard batteryLevel != -1 else {throw PhoneError.unknown} //unknown에러를 던진다 //guard문은 false일때 else문 실행되고 함수가 조기종료된다
+    guard batteryLevel >= 20 else {throw
+        PhoneError.batteryLow(batteryLevel: 20)}
+    return "배터리 상태가 정상입니다." //위에 guard조건이 다 안걸리면 반환값 던지기 //즉 정상적으로 입력받아야 두 가드문이 실행이 안되고 정상적으로 반환값이 출력된다
+}
+
+
+do {
+    try checkPhoneBatteryStatus(batteryLevel: -1) //오류가 발생할수있는 코드
+}catch PhoneError.unknown {
+    print("알 수 없는 에러입니다.")
+}catch PhoneError.batteryLow(let batteryLevel) {
+    print("배터리 전원 부족 남은 배터리: \(batteryLevel)%")
+} catch { //아무것도 안하면 지역상수인 error 사용할수있다.
+    print("그 외 오류 발생: \(error)")
+}
+
+
+//또다른 에러처리
+let status = try? checkPhoneBatteryStatus(batteryLevel: -1)
+print(status) //status가 unknown이기때문에 nil이 출력이 된다.
+
+//만약 함수가 에러를 던지지않는다면
+let status = try? checkPhoneBatteryStatus(batteryLevel: 30)
+print(status) //Optional("배터리 상태가 정상입니다.")
+
+//또 다른 에러처리(try!) -> 에러가 발생하지 않을 거라는 확신이있을때 -> 만약에 에러발생시 런타임에러발생
+let status2 = try! checkPhoneBatteryStatus(batteryLevel: 30)
+print(status2)
+
+======================================================
+#)클로저 -> 익명이긴 하지만 함수이다.
+
+let hello = { () -> () in      //파라미터, 리턴타입이 없어서 () -> ()선언함
+    print("hello")
+}
+
+hello()
+
+//파라미터와 리턴타입이 있는 경우
+let hello2 =  { (name: String) -> String in
+    return "Hello, \(name)"
+}
+
+hello2(name: "Gunter") //파라미터 전달하면 에러가된다. 즉, 클로저는 전달인자레이블을 생략하고 던져야한다
+hello2("Gunter")  //Hello, Gunter
+
+--------------
+func doSomething(closure: () -> ()) { //파라미터이름은 closure
+    closure()
+}
+
+doSomething(closure: { () -> () in  //doSomething함수호출시 위에 선언된 closure() 실행되서 print실행
+    print("hello")  
+})
+
+//또 다른 방법
+doSomething() { //이렇게 바로 클로저를 정의할 수있다. //파라미터와 반환값이 없는 클로저를 전달받은거니 이렇게 클로저를 정의할때 생략가능, in 키워드도 생략가능
+    print("hello2")
+}
+
+//또 다른방법(doSomething처럼 단 한개 클로저만 매개변수로 전달하는 경우는 소괄호 생략가능)
+doSomething {
+    print("hello3")
+}
+
+
+-----------------
+func doSomething2() -> () -> () {  //반환타입으로 파라미터와 반환타입이 없는 클로저 작성
+    return { () -> () in
+        print("hello04")
+    }
+}
+
+doSomething2()() //hello4
+
+//매개변수에 클로저가 여러개 있는 경우
+func doSomething2(success: () -> (), fail: ()->()) {
+
+}
+
+doSomething2 {
+    code
+} fail: {
+    code
+}
+
+--------------------
+//간단한 표현방법들
+func doSomething3(closure: (Int, Int, Int) -> Int) {//매개변수로 clousre를 받고있는데 클로저의 매개변수로 Int 3개를 받고있고 Int타입반환
+    closure(1,2,3)
+}
+
+doSomething3(closure: {(a,b,c) in    //이렇게 길었던 클로저 선언이 맨아래 표현간소화를 통해 짧아졌다
+    return a+b+c
+})
+
+doSomething3(closure: {
+    return $0+$1+$2
+})
+
+doSomething3(closure: {
+    $0+$1+$2  //단일문이면 return 생략가능
+})
+
+doSomething3() {
+    $0+$1+$2
+}
+
+doSomething3 {  //단하나의 클로저를 매개변수로 전달하면 소괄호생략가능
+    $0+$1+$2
+}
+
+==============================================
+#)고차함수
+다른함수를 전달인자로 받거나 함수실행의 결과를 함수로 반환하는 함수
+map, filter, reduce
+
+//map
+let numbers=[0,1,2,3]
+let mapArray = numbers.map {(number) -> Int in
+    return number * 2
+}
+print("map \(mapArray)")  //map [0,2,4,6]\n"
+
+//filter
+let intArray = [10,5,20,13,4]
+let filterArray = intArray.filter {$0 > 5}
+print("filter \(filterArray)")  //filter [10,20,13]\n"
+
+//reduce -> 하나로 통합
+let someArray = [1,2,3,4,5]
+let reduceResult = someArray.reduce(0) {  //첫 매개변수를 0으로 초기화 즉 0부터 더한다 //이것도 클로저다
+    (result: Int, element: Int) -> Int in
+    print("\(result) + \(element)")
+    return result + element
+}
+print("reduce \(reduceResult)")  //reduce 15
+
+===============================================
