@@ -1098,7 +1098,7 @@ Check #1 Somaker
 Check #2 Sodeul
 
 또한 파라미터로 전달될 때 복사된 값은 상수라고 했기때문에 sayHello함수내부에서
-name = "Somaker" 라고 재정의할수없다.
+name = "Somaker" 라고 재정의할수없다. ㅇㅇ
 -------------------------------------
 
 
