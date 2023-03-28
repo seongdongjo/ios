@@ -1098,8 +1098,128 @@ Check #1 Somaker
 Check #2 Sodeul
 
 또한 파라미터로 전달될 때 복사된 값은 상수라고 했기때문에 sayHello함수내부에서
-name = "Somaker" 라고 재정의할수없다. ㅇㅇ
+name = "Somaker" 라고 재정의할수없다.
 -------------------------------------
+#) 위에서 파라미터의 value타입은 복사된 상수값이 전달되지만
+   ReferenceType 값을 파라미터로 전달할 경우, 전달되는 주소값을 가지고온다.
+   
+
+class Human {
+	var name: String
+	var age: int
+	
+	init(name:String, age: Int) {
+		self.name = name
+		self.age = age
+	}
+}
+
+---------
+그래서 만약, 함수내부에서 전달된 인스턴스의 프로퍼티를 변경한다면?(위의 경우에 상수이기때문에 변경이안됬다)
+func changeName(human: Human) {
+	human.name = "Somaker" //재정의해도 에러가 안난다.
+}
+
+let sodeul = Human.init(name: "Sodeul", age: 10)
+changeName(human: sodeul)
+print(sodeul.name)
+
+즉, 복사해서 전달하는게 아니라 참조에의한 전달이다.
+=========================================================
+#) 위에서 value타입은 복사,상수라 값변경이 안됬는데 방법이 있긴하다.
+
+#) In-Out-Parameters: Value 타입의 값을 참조로 전달하는 방법
+Value 타입의 값을 Reference 타입의 값처럼 참조로 전달하고 싶을 때
+
+#)함수선언
+함수파라미터 선언할 때 inout 키워드를 작성한다.
+func sayHello(name: inout String) {}
+
+#)함수호출
+함수호출 할 때는 Argument 앞에 & 붙여주기
+
+sayHello(name: &name)
+------------------------------
+//예제
+func sayHello(name: inout String) {
+	name = "Somaker" //이렇게 바꿀수가 있다.
+}
+
+var name: String = "Sodeul"
+sayHello(name: &name)
+print(name) //Somaker 가 출력된다.
+
+------------------------------
+#) 파라미터에 기본 값 설정하기
+
+형식: (name: Type = 기본값)
+파라미터의 Type 옆에  = (등호)를 넣어서 기본 값을 지정한다.
+
+파라미터에 기본값을 설정한 경우 호출 시 파라미터를 생략해도된다.
+
+#) 예제를 살펴보자 -> 아래처럼 = 를 통해 기본 값을 설정 할 수 있다.
+func sayHello(name: String = "Stranger") {
+	print("Hello, \(name)")
+}
+
+sayHello()  //"Hello, Stranger"
+sayHello(name: "Sodeul") //"Hello, Sodeul"
+
+//여기서 중요한 것은 기본값이 있는 파라미터는 생략이 가능하다.
+
+-----------------------------------
+#)가변 파라미터
+하나의 파라미터가 여러 개의 아규먼트를 받을 때 사용한다.
+가변 파라미터의 타입은 배열이다.
+Type뒤에 ... 을 붙이면된다.
+
+func printSum(of nums: Int...) {}
+이럴경우 nums라는 가변파라미터는 nums: [Int] 이렇게 int형 배열이 된다.
+
+가변파라미터는 ,(comma)를 이용해 여러 아큐먼트를 받는다.
+단, 가변파라미터 바로 뒤에 있는 파라미터는 무조건 Argument Label을 가져야한다.
+컴파일러 입장에서 어디까지 ,(comma)가 가변파라미터인지 모르기때문이다.
+
+
+//만약 Argument Label을 wildcard pattern으로 생략하면 어디까지 가변파라미터인지 모른다.
+틀린예) func printSum(of nums: Int..., _ initValue: Int} {}   
+
+맞는예) func printSum(of nums: Int..., initValue: Int} {}
+	  printSum(of: 1, 2, 3, 4, initValue: 100)
+	  
+	  
+-------------------------------------
+또, 주의할 것은 가변파라미터는 기본값을 가질 수 없다.
+또, 가변파라미터는 파라미터 한번만 쓸 수 있다.
+
+틀린예) func printSum(of nums: Int..., nums2: Int...) {}
+
+====================================================
+#) Nested Function(중첩함수)
+func outer() {
+	print("outer")
+	
+	func inner() {
+		print("inner")
+	}
+	inner()
+}  //outer 함수내에서 inner() 함수를 실행할 수 있지만
+   //outer 함수외부에서는 inner함수를 실행할 수 없다.
+   
+====================================================
+#) 애플 문서에 나오는 함수 표기법
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
