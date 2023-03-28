@@ -514,7 +514,7 @@ class Vehicle {
 }
 
 //상속받는 클래스 정의하기
-class Bicycle: Vehicle {
+class Bicycle: Vehicle {  //Vehicle를 상속받음
     var hasBasket = false
 }
 
@@ -522,6 +522,7 @@ var bicycle = Bicycle()
 bicycle.currentSpeed  //0 -> 부모값을 가져올수있다
 bicycle.currentSpeed=15.0  //값 변경가능
 
+//Vehicle를 상속받는 또 다른 클래스 선언
 //오버라이딩
 class Train: Vehicle {
     override func makeNoise() {
@@ -844,7 +845,7 @@ enum PhoneError: Error {
     case batteryLow(batteryLevel: Int) //연관갑설정
 }
 
-throw PhoneError.batteryLow(batteryLevel: 20)  //throw구문에서 에러발생
+throw PhoneError.batteryLow(batteryLevel: 20)  //throw구문에서 에러발생 -> 아래쪽 catch에서 PhoneError.batteryLow를 찾아간다.
 
 func checkPhoneBatteryStatus(batteryLevel: Int) throws -> String{ //반환값이 String
     guard batteryLevel != -1 else {throw PhoneError.unknown} //unknown에러를 던진다 //guard문은 false일때 else문 실행되고 함수가 조기종료된다
@@ -987,3 +988,118 @@ let reduceResult = someArray.reduce(0) {  //첫 매개변수를 0으로 초기�
 print("reduce \(reduceResult)")  //reduce 15
 
 ===============================================
+#) 클로저라고 하면 보통 익명함수를 뜻하는 걸로 알텐데 
+func 키워드를 이용해 이름을 붙여주는 함수들도 모두 클로저이다.
+
+클로저에는 Named Closure, Unnamed Closure 가있다.
+
+우리가 선언해왔던 이름이 있는 함수는
+func doSomething() {
+	print("Somaker");
+}
+이런게 NamedClosure이다.
+
+-----------------------
+//이런게 익명함수이고 Unnamed Closure이다.
+//즉, 클로저는 NamedClosure, UnnamedClosure 둘다포함하지만 보통 UnnamedClosure를 말한다.
+let closure = { print("Somaker")}
+
+-----------------------
+func란 키워드로 선언되는 것은 함수이자 NameClosure이고
+이 함수가 클래스,구조체,열거형에 속해있으면 메서드라고 부른다. ---> 이게 함수와 메서드의 차이이다.
+
+func name(parameters) -> Return Type {
+}
+
+--------------------------
+//파라미터를 선언하는 방식은 크게 세가지가 있다.
+1) Argument Label과 Parameter Name 각각 명시하기
+Argument Label: 함수를 호출할 때 사용하는 이름
+Paramter Name: 함수 내에서 사용할 파라미터의 이름
+
+func sayHello(to name: String) {
+	print("Hello, \(name)");
+}
+sayHello(to: "Sodeul")
+
+여기서 Argument Label은 to에 해당하고 함수를 호출할 때 사용된다.
+Parameter Name은 name에 해당된다.
+
+근데, 우린 지금껏 print함수를 쓸 때 print("Somaker") 이렇게 to 없이 썻는데????
+이거는 print 함수를 보면 func print(_ items: Any...) 이렇게 되있는데
+Argument Lable을 언더바로 표현하고있다.
+그래서 Argument Lable을 생략하고 싶으면, _를 사용해서 생략할수있음
+이거를 wildcard Pattern 이라고 한다.
+
+따라서 다음과 같이 wildcard Pattern을 이용해 Argument Lable을 생략한 함수는 아래와같다.
+
+func sayHello(_ name: String) {
+	print("Hello, \(name)")
+}
+
+호출해보자
+sayHello("Sodeul")
+
+단, ParameterName은 생략못한다.
+---------------------------------
+2) Argument Label & Parameter Name을 한번에 명시하기 -> to를 name으로 파라미터와 일치시키면 호출할때 편하자낭~
+
+이렇게 하나만 선언한경우 name이 Argument Label이자 Parameter Name이 되는 것이다.
+
+func sayHello(name: String) {
+	print("Hello, \(name)")
+}
+
+sayHello(name: "Sodeul")
+
+----------------------------------
+3) 파라미터를 받지 않는 경우
+func sayHello() {}
+
+----------------------------------
+#)리턴타입
+func sayHello(name: String) -> String {
+	return name;
+}
+
+#) 리턴타입이 없는 경우
+func sayHello(name: String) {}
+
+----------------------------------
+#) 파라미터로 전달되는 Value 타입의 값은 복사된 상수값이다.
+Value타입은 int,string 같은 자료형을 말하는 것이다.
+
+func sayHello(name: String) {}
+그리고 다음과 같이 "Sodeul" 이라는 값을 가진
+
+var name: String = "Sodeul"
+sayHello(name: name)
+
+name이란 변수의 값을 함수의 파라미터로 넘겨줬다.
+이러면 sayHello라는 함수가 실행될 당시,
+name이란 파라미터의 값인 "Sodeul"을 복사해서 파라미터로 가짐!!
+
+그래서 sayHello함수가 실행되는 도중에 호출한 곳에서 name이란 변수를 바꿔도 함수내부엔 영향이 없다.
+
+
+func sayHello(name: String) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3) { //메인이 먼저 실행된 후
+        print("Check #2 \(name)"")
+    }
+}
+ 
+var name: String = "Sodeul"
+sayHello(name: name)
+name = "Somaker"
+print("Check #1 \(name)")
+
+//결과
+Check #1 Somaker
+Check #2 Sodeul
+
+또한 파라미터로 전달될 때 복사된 값은 상수라고 했기때문에 sayHello함수내부에서
+name = "Somaker" 라고 재정의할수없다.
+-------------------------------------
+
+
+
