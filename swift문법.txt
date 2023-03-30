@@ -1336,8 +1336,89 @@ func doSomething(_ callback: (String) -> ()) {
 doSomething(message in
 	print("Success!" + message)
 }
-============================================================================
 
+//결과
+Success!sodeul
+Success!sodeul
+Success!sodeul
+============================================================================
+#) defer -> 작성된 위치와 상관없이 함수 종료 직전에 실행되는 구문
+
+func testDefer() {
+	print("Check #1")
+	
+	defer { print("defer #1") }
+	
+	print("Check #2")
+}
+
+testDefer()  
+
+//출력결과
+Check #1
+Check #2
+defer #1
+
+==========================================================================
+#) defer를 읽기 전에 함수를 종료시키면 defer는 실행되지 않는다!!!
+
+func testDefer() {
+	print("Check #1")
+	
+	return;
+	defer { print("defer #1") }
+	
+	print("Check #2")
+}
+
+testDefer()
+
+//출력결과 -> 함수가 끝났기때문에 defer는 불리지 않는다.
+Check #1
+
+=======================================================================
+#) 하나의 함수에서 여러번 defer를 호출 가능하며, 실행 순서는 가장 마지막에 실행된 defer부터 역순이다.
+
+func testDefer() {
+	defer { print("defer #1") }
+	defer { print("defer #2") }
+	defer { print("defer #3") }
+}
+
+testDefer()
+
+//출력결과
+defer #3
+defer #2
+defer #1
+
+가장 마지막에 읽은 defer가 먼저 실행되고, 가장 처음 읽은 defer가 가장 마지막에 실행
+
+=============================================================
+#) defer는 중첩해도 사용가능하며, 실행순서는 가장 바깥쪽 defer부터 실행된다.
+
+func testDefer() {
+    defer {
+        defer {
+            defer {
+                print("defer #3")
+            }
+            print("defer #2")
+        }
+        print("defer #1")
+    }
+}
+
+//출력결과
+defer #1
+defer #2
+defer #3
+
+====================================================================
+#) defer는 언제 사용할까??
+함수를 종료하기 직전에 정리해야 하는 변수나 상수를 처리하는 용도
+
+===================================================================
 
 
 
