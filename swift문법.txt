@@ -1505,6 +1505,134 @@ closure()
 })()
 
 =========================================================================
+//Outlet, Action을 이용하면 코드에서 UI접근이 가능하다.
+//스토리보드에서 버튼요소 클릭하고 우클릭해서 컨트롤러안에 끌어놓으면
+//설정 할 수 있는 항목이 뜬다.
+import UIKit
+
+class ViewController: UIViewController {
+    @IBOutlet weak var colorView: UIView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+    @IBAction func tabChangeColorButton(_ sender: UIButton) {
+        self.colorView.backgroundColor = UIColor.blue
+        print("색상 변경이 클릭되었음") //이거는 콘솔에 찍힌다
+    }
+    
+}
+======================================================================
+콘텐츠고유사이즈(가로,세로)가 늘어나는데 이때 늘어나는저항을 content hugging이라하고
+더 줄어들게되는것에 저항하는것을 content compression resistance라고한다
+
+우선순위가 있는데 휴깅은 우선순위가 높으면 내 크기를 유지하고 낮으면 크기가 늘어난다.(설정은 show the size inspector에 있다, 여러줄 입력 시 lines를 0으로 하면된다)
+우리는 명언줄이 명언한사람이름보다 높이가 길어야하니 명언줄의 label의 크기를 늘이기 위해서는 명언한사람의 label우선순위인 251보다 낮게 250으로
+설정해야 늘어나게된다.
+
+명언줄 label에서 여러줄을 추가시키면 높이가 늘어나는데 밑에 명언하는사람의label이 줄어들게 할건지 물어본다(content compression resistance)
+우리는 명언줄이 잘리더라도 명언한 사람의 label크기는 줄면 안되니까 명언한 사람의 label크기 우선순위를 1000으로 해서 압축을 저항해야한다.
+설정은 content compression resistance priority에서 한다. (이 순위가 비교해서 낮아야 압축이안된다.)
+
+import UIKit
+
+class ViewController: UIViewController {
+    
+    //라벨과 버튼을 우클릭으로 끌어 당겨서 만들었다.
+    @IBOutlet weak var quoteLabel: UILabel!
+    @IBOutlet weak var namedLabel: UIButton!
+    
+    //버튼을 눌렀을 때 액션함수가 호출되야 하니까
+    //즉, 명언생성을 끌어다 놓고 아래처럼 만들었다.
+    //명언생성 버튼을 누르면 아래 액션함수가 실행된다.
+    @IBAction func tapQuoteGeneratorButton(_ sender: Any) {
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
+=========================================================
+//이제 명언 구조체를 만들어보자
+//좌측에 QuotesGenerator폴더 우클릭하면 newFile -> swift -> Quote.swift이름으로 만든다.
+//
+//  Quote.swift
+//  QuotesGenerator
+//
+//  Created by 조성동 on 2023/03/31.
+//
+
+import Foundation
+
+struct Quote {
+    let contents: String
+    let name: String
+}
+
+
+----------------
+//
+//  ViewController.swift
+//  QuotesGenerator
+//
+//  Created by 조성동 on 2023/03/31.
+//
+
+import UIKit
+
+class ViewController: UIViewController {
+    
+    //라벨과 버튼을 우클릭으로 끌어 당겨서 만들었다.
+    @IBOutlet weak var quoteLabel: UILabel! //명언
+    @IBOutlet weak var nameLabel: UILabel!  //이름
+    
+    let quotes = [
+        Quote(contents: "죽음을 두려워하는 나머지 삶을 시작조차 못하는 사람이 많다", name: "벤다이크"),
+        Quote(contents: "나는 나 자신을 빼 놓고는 모두 안다", name: "비용"),
+        Quote(contents: "편견이란 실효성이 없는 의견이다", name: "암브로스 빌"),
+        Quote(contents: "분노는 바보들의 가슴속에서만 살아간다", name: "아인슈타인"),
+        Quote(contents: "몇 번이라도 좋다! 이 끔찍한 생이여... 다시", name: "니체")
+    ]
+    
+    //버튼을 눌렀을 때 액션함수가 호출되야 하니까
+    //즉, 명언생성을 끌어다 놓고 아래처럼 만들었다.
+    //명언생성 버튼을 누르면 아래 액션함수가 실행된다.
+    @IBAction func tapQuoteGeneratorButton(_ sender: Any) {
+        // 0~4까지의 랜덤한 수를 만들어낸다
+        //배열의 인덱스 요소로 접근해야하니까 int형으로 치환
+        let random = Int(arc4random_uniform(5))
+        let quote = quotes[random]
+        self.quoteLabel.text = quote.contents
+        self.nameLabel.text = quote.name
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
+==============================================
+IBOutlet은 스토리보드에 등록된 ui 오브젝트를 코드에 변수에 접근할 수 있도록 만들어준다.
+IBAction은 버튼과 연결시켜 이벤트를 처리
+
+===============================================
+
+
+
+
+
+
+
 
 
 
@@ -1514,6 +1642,33 @@ closure()
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
