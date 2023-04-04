@@ -1626,6 +1626,99 @@ IBOutlet은 스토리보드에 등록된 ui 오브젝트를 코드에 변수에 
 IBAction은 버튼과 연결시켜 이벤트를 처리
 
 ===============================================
+#)Content View Controller
+- 화면을 구성하는 뷰를 직접 구현하고 관련된 이벤트를 처리하는 뷰 컨트롤러
+
+#)Container View Controller
+- 하나 이상의 Child View Controller를 가지고 있다.
+- 하나 이상의 Child View Controller를 관리하고 레이아웃과 화면전환을 담당한다.
+- 화면 구성과 이벤트관리는 Child View Controller에서 한다
+- Container View Controller는 대표적으로 Navigation Controller 와 TabBar Controller가 있다.
+
+#) Navigation Controller는 계층구조로 구성된 content를 순차적으로 보여주는데
+예를들어 설정 > 기기관리 > vpn관리 같은것이다. vpn관리로 들어가면 기기관리 content는 덮어쓰고 뒤로가기하면 다시나타나는 형식이다.
+Navigation Stack이라한다. 설정이 젤 밑에 쌓이고 기기관리가 그 위에 쌓인다.
+vpn관리에서 뒤로가기버튼을 누르면 스택에 있는 vpn관리 Controller를 스택에서 제거할 수 있다.(pop)
+
+========================================
+#)화면전환하는 방식
+1. 소스코드를 통해 전환하는 방식
+
+2. storyboard에서 기본으로 제공하는 기능을 통해 전환하는 방식
+
+#)세부적으로 4가지 방법이있다.
+1. View Controller의 다른 View 위에 다른 View를 가져와 바꿔치기 -> 이 방법은 메모리 누수가 발생해서 거의 사용하지 않는다.
+2. View Controller에서 다른 View Controller를 호출하여 전환하기 -> 기존 viewcontroller에 새로운 viewcontroller를 덮는방식
+3. Navigation Controller를 사용하여 화면 전환하기
+4. 화면 전환용 객체 세그웨어(segueway)를 사용하여 화면 전환하기 -> 스토리보드만으로 가능, 코드작성없이
+
+
+
+=============================================
+#) 실습(기존에 스토리보드에서 제공하는 걸 써보자)
+1.navigation controller를 버튼 추가하는 것처럼 검색해서 추가한다. -> navigation controller여서 상단에 네비게이션 바가 생성된다.
+2.생성되면 root view는 지운다.
+3.추가된 navigation controller를 클릭해서 옆에 속성을 보면 is initial view controller를 클릭하면 최초의 화면이 된다. -> 우클릭 드래그해서 (기존의)view controller에 놓는다.(root선택)
+navigation controller에는 내가 만든 버튼이있다.("Sugue로 push" 라는 이름을 가진 버튼을 만들었다. 이걸클릭하면 상단에 back버튼이 생기면서 SugueViewController로 화면이 바뀐다)
+5. 프로젝트 우클릭 - new file - cocoa - 이름은 SuguePushViewController, subclass of는 UIViewController로 선택
+6. SuguePushViewController에서(폰그림상단에 클릭) SuguePushViewContriller로 이름 설정, 그러면 옆에 main에 이름이 바뀜(Segue로)
+7. navigation controller에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면 상단에 back 버튼이 생긴다.
+8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView -> 상단 back -> navigation controller 자유롭게 이동한다.
+
+현재구성이                                         
+                                            -----SuguePushViewController-----              ----ViewController------
+                                            |                                               <Back
+                                            |   
+-----navigation controller ----             |    Segue로 push(누르면이동)           ----->       segue로 push
+|                         |                 |                                                 
+|                         |       ----->     |                                                back button
+|                         |
+|                         |                   
+---------------------------
+
+
+
+이제 우리는 back button에 액션을 줄것이다.(상단에 <back은 잘 동작한다)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
