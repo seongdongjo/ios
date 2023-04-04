@@ -1659,14 +1659,14 @@ vpn관리에서 뒤로가기버튼을 누르면 스택에 있는 vpn관리 Contr
 1.navigation controller를 버튼 추가하는 것처럼 검색해서 추가한다. -> navigation controller여서 상단에 네비게이션 바가 생성된다.
 2.생성되면 root view는 지운다.
 3.추가된 navigation controller를 클릭해서 옆에 속성을 보면 is initial view controller를 클릭하면 최초의 화면이 된다. -> 우클릭 드래그해서 (기존의)view controller에 놓는다.(root선택)
-navigation controller에는 내가 만든 버튼이있다.("Sugue로 push" 라는 이름을 가진 버튼을 만들었다. 이걸클릭하면 상단에 back버튼이 생기면서 SugueViewController로 화면이 바뀐다)
+ViewController에는 내가 만든 버튼이있다.("Sugue로 push" 라는 이름을 가진 버튼을 만들었다. 이걸클릭하면 상단에 back버튼이 생기면서 SugueViewController로 화면이 바뀐다)
 5. 프로젝트 우클릭 - new file - cocoa - 이름은 SuguePushViewController, subclass of는 UIViewController로 선택
 6. SuguePushViewController에서(폰그림상단에 클릭) SuguePushViewContriller로 이름 설정, 그러면 옆에 main에 이름이 바뀜(Segue로)
-7. navigation controller에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면 상단에 back 버튼이 생긴다.
-8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView -> 상단 back -> navigation controller 자유롭게 이동한다.
+7. viewController에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면 상단에 back 버튼이 생긴다.
+8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView -> 상단 back -> viewController 자유롭게 이동한다.
 
 현재구성이                                         
-                                            -----SuguePushViewController-----              ----ViewController------
+                                            -----ViewController-----              ----SuguePushViewController------
                                             |                                               <Back
                                             |   
 -----navigation controller ----             |    Segue로 push(누르면이동)           ----->       segue로 push
@@ -1679,14 +1679,35 @@ navigation controller에는 내가 만든 버튼이있다.("Sugue로 push" 라�
 
 
 이제 우리는 back button에 액션을 줄것이다.(상단에 <back은 잘 동작한다)
+백버튼을 드래그해서 끌어당기면 SuguePushViewController 소스에 놓으면 아래처럼 된다.
+
+//
+//  SeguePushViewController.swift
+//  ScreenTransitionExample
+//
+//  Created by 조성동 on 2023/04/04.
+//
+
+import UIKit
+
+class SeguePushViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        //BackButton누르면 이전화면으로(popViewController쓰면됨)
+        self.navigationController?
+            .popViewController(animated: true)
+        self.navigationController?
+            .popToRootViewController(animated: true) // 제일 처음 스택으로 간다.
+    }
+}
 
 
-
-
-
-
-
-
+===============================================================
 
 
 
