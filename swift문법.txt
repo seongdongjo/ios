@@ -1708,10 +1708,58 @@ class SeguePushViewController: UIViewController {
 
 
 ===============================================================
+//이제 하나 더 추가 
+현재구성이                                         
+                                            -----ViewController-----              ----SuguePushViewController------
+                                            |                                               <Back
+                                            |   
+-----navigation controller ----             |    Segue로 push(누르면이동)           ----->       segue로 push
+|                         |                 |                                                 
+|                         |       ----->     |   Sugue로 present                               back button
+|                         |
+|                         |                   
+---------------------------
+
+                                                                            ----> -----SuguePresentViewController-----
+                                                                                         
+                                                                                          Sugue로 present
+                                                                                          back button
 
 
 
 
+
+1. View COntroller 생성
+2. 프로젝트 파일 우클릭 - new file - cocoa touch class - 이름은 SuguePresentViewController
+3. 만든 view Controller위에 네비게이션바 첫번째 동그라미 선택 - custom class에 이름을 SuguePresentViewController 라고 하고
+4. viewController에서 "Sugue로 present" 드래그해서 SuguePresentViewController로 드래그해서 놓으면 segue방식은 present modally를 선택
+이러면, 현재 화면(새로운 뷰컨트롤러로)으로 덮어씌워지게 된다.
+
+5. back button을 활성화하기 위해 SuguePresentViewController 소스에 끌어다 놓으면 된다.
+//
+//  SuguePresentViewController.swift
+//  ScreenTransitionExample
+//
+//  Created by 조성동 on 2023/04/04.
+//
+
+import UIKit
+
+class SuguePresentViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    //이렇게하면 밑에서 위로 올라가면서 새 화면이 뜨는데 모달형식으로 뜬다. 그래서 전체화면을 꽉안채운다.
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.presentingViewController?
+            .dismiss(animated: true, completion: nil)
+    }
+}
+
+//그래서 전체화면으로 채울려면 컨트롤러에 연결되 선을 클릭하고 속성에 Show the attributes inspector 항목에 presentation을 fullscreen으로 선택하면된다.
+//viewController -----  SuguePresentViewController
 
 
 

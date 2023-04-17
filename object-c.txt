@@ -1,0 +1,380 @@
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    NSString * appDelegateClassName;
+    @autoreleasepool {
+        //모든코드는 이안에서 작성
+        int wheel = 4; //int float double long - primitive type
+        int seats = 2;
+        NSLog(@"wheel: %i, seats: %i", wheel, seats);
+        
+        appDelegateClassName = NSStringFromClass([AppDelegate class]);
+    }
+    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+}
+
+=======================================================
+@interface 의 의미는 클래스를 정의한다는 뜻이다. 즉, 자바의 interface와 다르다.
+ex) @interface SimpleClass : NSObject  (상속을 받는다, NSO라는)
+    @end
+
+
+-------------------------------
+#)실제 예시
+(선언부)
+@interface XYZPerson : NSObject(최상위다, 생략해도 상관없음)
+- (void)sayHello;
+@end
+
+(구현부)
+#import "XYZPerson.h"
+@implementation XYZPerson
+-(void)sayHello {
+    NSLog(@"Hello, World!");
+}
+@end
+--------------------------------
+class, instance  == object
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    int wheels;
+    int seats;
+}
+
+//member method
+-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+-(void)setSeats:(int)s;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+-(void)setWheels:(int)w {
+    wheels = w;
+}
+
+-(void)setSeats:(int)s {
+    seats = s;
+}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //class는 *넣어줘야한다
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        
+        //[Receiver Message] Message는 함수이름, 누구의 메시지인지 hello객체의
+        [hello setWheels:4];
+        [hello setSeats:2];
+        [hello print];
+    }
+    return 0;
+}
+
+===============================================
+여기서 new는 메모리 힙영역에 동적할당 == alloc과 init을 합쳐놓은것이다 -> self사용가능
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    int wheels;
+    int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+@property int wheels; //getter, setter 해준다
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print{
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
+        
+        [hello setWheels:4];
+        [hello setSeats:2];
+        
+        NSLog(@"wheels: )
+    }
+    return 0;
+}
+====================================================
+@interface Vehicle : NSObject {
+    //member variable 영역
+    //int wheels;
+    //int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+
+//getter, setter 이름 재정의해보기 setWheels를 wheels로(setter=wheels:), wheels를 getWheels로(getter=getWheels)
+//setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
+@property (getter=getWheels,setter=wheels:) int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print{
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
+        
+        //@property (getter=getWheels) int wheels; 이거에 인해서 [hello wheels] 는 못부른다.
+        //[hello getWheels] 이렇게 해야한다.
+        [hello getwheels]
+        [hello wheels:4]
+        
+    }
+    return 0;
+}
+
+========================================================
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    //int wheels;
+    //int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+
+//getter, setter 이름 재정의해보기 setWheels를 wheels로, wheels를 getWheels로
+//setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
+@property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        
+        //[hello wheels] 이렇게 접근하는 방식은 옛날방식이다.
+        hello.wheels;
+        hello.seats;
+        hello.wheels = 4;
+        hello.seats = 2;
+        
+    }
+    return 0;
+}
+
+====================================================
+#)이제 파일을 분리해서 해보자.
+new - cocoa class - 클래스이름은 Vehicle로 만들면 m, h 파일이 생긴다.
+
+//
+//  Vehicle.h
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/17.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+}
+
+@property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+
+//인자를 2개 받게된다.
+-(void)setWheels:(int)w Seats:(int)s;
+
+-(void)drawCircleX:(int)x Y:(int)y R:(int)r;
+-(void)drawCircleXYR:(int)x :(int)y :(int)r;
+
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@end
+
+
+-----------------------
+//
+//  Vehicle.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/17.
+//
+
+#import "Vehicle.h"
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+
+-(void)setWheels:(int)w Seats:(int)s {
+    wheels = w;
+    seats = s;
+}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+@end
+
+--------------------------
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+//애플에서 제공하는거는 꺽새(<>) 로 , 우리가 만든건 "" 로 import한다.
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Vehicle.h"
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //Vehicle *hello = [Vehicle new];  //인스턴스 생성
+        Vehicle *hello = [[Vehicle alloc]init];
+        
+        [hello setWheels:4 Seats:2];
+        [hello drawCircleXYR:1 :3 :2];
+        
+        NSLog(@"wheels: %i, seats: %i", hello.wheels, hello.seats);
+    }
+    return 0;
+}
+
+=================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
