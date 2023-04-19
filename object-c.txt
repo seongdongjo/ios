@@ -333,6 +333,192 @@ int main(int argc, char * argv[]) {
 }
 
 =================================================
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+//애플에서 제공하는거는 꺽새(<>) 로 , 우리가 만든건 "" 로 import한다.
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Vehicle.h"
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //Vehicle *hello = [Vehicle new];  //인스턴스 생성
+        Vehicle *hello = [[Vehicle alloc]init];
+        
+        [hello setWheels:4 Seats:2];
+        [hello drawCircleXYR:1 :3 :2];
+            
+        if(hello.wheels == 4) {
+            NSLog(@"wheels: 4");
+        }else {
+            NSLog(@"no");
+        }
+        
+        switch(hello.seats) {
+            case 4:
+                NSLog(@"wheels: 4");
+                break;
+            case 3:
+                NSLog(@"wheels: 2");
+                break;
+            default:
+                NSLog(@"NO");
+                break;
+        }
+        
+        for(int i=0l i<hello.wheels; i++) {
+            NSLog(@"wheels: %i", i);
+        }
+        int i = 0;
+        while(i<hello.seats) {
+            NSLog(@"seats: %i", i);
+            i++;
+        }
+    }
+    return 0;
+}
+
+=====================================================
+foundation framework -> 안에 최상위 클래스 NSObject 그 밑에 많다.
+
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        //객체를 만들어야 쓸 수 있다.
+        NSString *str = [[NSString alloc]init]; //인스턴스 오브젝트 생성
+        str = @"This is NSString"; //문자열이라는 의미이다.(@)
+        NSLog(@"str : %@", str);
+        
+        //위에 방식은 불편해서 바로 쓰자
+        //initwith라고 시작하는 메서드들을 convenience method라고하는데
+        //동적할당을 하면서 초기화까지 같이하기 위해서 new 말고 alloc[init을 쓴다.
+        NSString *str1 = [[NSString alloc]initWithString:@"This is NSString"];
+        NSLog(@"str : %@", str);
+        
+        //근데 NSString은 많이 쓰이니까 NSString에서만 아래처럼 가능
+        NSString *str2 = @"This is NSString";
+        NSLog(@"str2: %@", str);
+    }
+    return 0;
+}
+
+============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSString 메서드 중에 substringFromIndex가 있는데 문서에서 보면
+       // -(NSString *)substringFromIndex:(NSUInteger)anIndex 이렇게되있다.
+       // 반환값은 NSString이고 인자는 NSUInteger이다(양수->부호가없는)
+    
+        
+        
+        NSString *str = @"This is NSString";
+        
+        NSString *result;
+        result = [str substringFromIndex:6];  //str의 메서드인 substringFromIndex에 인자를 던짐 -> 문자열반환
+        result = [str substringToIndex:3]; //Thi
+        result = [[str substringToIndex:11]substringFromIndex:8]; //This is NSS까지 자르고 NSS까지 다시 자른다. -> 결과는 NSS
+        result = [[str substringFromIndex:8]substringToIndex:3]; //NSString자르고 NSS까지자르고
+        
+        NSLog(@"result : %@", result); //s NSString
+        
+        //NSString이 immutable한 클래스인데 -> 중간에 값을 바꿀수없다. 통째로는 가능한데 부분부분 수정이안된다.
+        //그래서 위에처럼 리턴이 가능하다.
+        
+        
+    }
+    return 0;
+}
+
+============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSString 메서드 중에 substringWithRange가 있는데 문서에서 보면
+       // -(NSString *)substringWithRange:(NSRange)aRange 로 되어있다.
+       //NSRange를 보면 구조체이다.
+       
+        // location부터 length까지 잘라라
+        //typedef struct _NSRange {
+        //    NSUInteger location;
+        //    NSUInteger length;
+        //}NSRange;
+        
+        NSString *str = @"This is NSString";
+        
+        NSString *result;
+        //NSMakeRange는 구조체를 만드는 메서드이다.
+        result = [str substringWithRange:NSMakeRange(8, 3)]; //NSS
+        result = [[str substringWithRange:NSMakeRange(8,3)]lowercaseString]; //nss
+        
+        
+    }
+    return 0;
+}
+
+=============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
