@@ -475,6 +475,406 @@ int main(int argc, char * argv[]) {
 }
 
 =============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //이제 mmutable 보자 -> NSMutableString 클래스
+       //문자열 중간중간을 바꿀 수 있다.
+        NSString *str = @"This is NSString";
+        
+        //stringWIthString 메서드는 클래스메서드라서 init안해도 생성됨
+        NSMutableString *mstr = [NSMutableString stringWithString:str];
+        //또 NSMutableString안에 인스턴스 메서드들도 있는데 그중에
+        // -(void)appendString:(NSString *) 이있다. 이거는 반환값이 없고 자기자신이 바뀌는 것이다.
+        // NSString은 새로운 스트링을 만들어서 리턴했다 이게 차이첨이다
+        [mstr appendFormat:@" and NSMutableString"]; //This is NSString and NSMutableString
+        
+        //insertString도 있다.
+        // -(void)insertString:(NSString *)
+        //             atIndex:(NSUInteger)  -> 인자를 두개를 받는다.
+        
+        [mstr insertString:@"Mutable" atIndex:8]; //This is Mutable NSString and NSMutableString
+        
+    }
+    return 0;
+}
+
+==========================================================
+//NSArray
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        //NSArray는 값 추가, 수정 불가 한번들어가면(안늘어난다)
+        //NSMutableArray는 값을 넣으면 넣는대로 늘어난다.
+        
+        //arrayWith로 시작하는 메서드는 클래스메서드
+        //initWith로 시작하는 메서드는 인스턴스메서드이다.
+        
+        //기능은 똑같다.
+        //배열 초기화 해보자
+        //nil을 넣는이유는 정적이기때문에 끝임을 알려줘야한다.
+        NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
+                          @"April",@"June",@"July", @"August", @"September",nil];
+        
+        //이 방식은 별로다
+        for(int i = 0; i<[month count]; i++) {
+            NSLog(@"month: %@", month[i]);
+        }
+        
+        // -(ObjectType)objectAtIndex:(NSUInteger)  -> 객체를 반환한다.
+        for(int i=0; i<[month count]; i++) {
+            NSLog(@"month: %@", [month objectAtIndex:i]);
+        }
+        
+        //for in 방식
+        for(NSString *strTemp in month) {
+            NSLog(@"month: %@", strTemp);
+        }
+    }
+    return 0;
+}
+=============================================================
+//NSArray
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
+                                  @"April",@"June",@"July", @"August", @"September",nil];
+                
+        //NSMutableArray는 동적배열을 만든다.
+        //이번에는 클래스메서드를 써보자
+        NSMutableArray *mmonth = [NSMutableArray arrayWithArray:month];
+        [mmonth addObject:@"October"]; //끝에추가 -> 이렇게 값 증가도 가능
+        [mmonth addObject:@"November"];
+        [mmonth addObject:@"December"];
+        
+        for(NSString *strTemp in mmonth) {
+            NSLog(@"mmonth: %@", strTemp);
+        }
+    }
+    return 0;
+}
+
+============================================================
+//NSDictionary
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //초기화
+       //메서드중에 dictionary로 시작하면 클래스메서드
+       //init으로 시작하면 인스턴스메서드이다
+       // value, key, value, key형식으로 넣는다.
+        
+        //정적이다.
+       NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
+        @"이름", @"모름", @"나이",nil];
+       
+        NSLog(@"name: %@",[dic objectForKey:@"이름"]); //name: 최강사
+        NSLog(@"age: %@",[dic objectForKey:@"나이"]);  //age : 모름
+    }
+    return 0;
+}
+
+============================================================
+//NSDictionary
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSMutableDictionary
+        NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
+                @"이름", @"모름", @"나이",nil];
+        
+        NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        [mdic setObject:@"한국" forKey:@"사는곳"];
+        [mdic setObject:@"약간검정" forKey: @"얼굴색"]; //이렇게 추가할 수 있다.
+        
+        NSLog(@"location: %@", [mdic objectForKey:@"사는곳"]); //사는곳이 키값이다. -> location : 한국
+        
+    }
+    return 0;
+}
+
+===========================================================
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint]
+    }
+}
+
+--------------------
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+===========================================
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+---------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+----------------------
+//
+//  BookManager.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+//배열이 몇개들어올지 모르니까 늘어날수도있어서 mutable로 한다
+@class Book; //컴파일오류 방지하기 위해 선언-> 컴파일이 빨라진다. import하는것보다
+@interface BookManager : NSObject { //BookManager 클래스안에 bookList라는 변수가있다.
+    NSMutableArray *bookList;
+}
+
+-(void)addBook:(Book *)bookObject;  //book객체를 인자로받는다
+-(NSString *)showAllBook;
+
+@end
+
+-----------------------
+//
+//  BookManager.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "BookManager.h"
+#import "Book.h"
+
+@implementation BookManager
+    //초기화코드
+-(id)init {
+    self = [super init];
+    if(self) {
+        bookList = [[NSMutableArray alloc]init];
+    }
+    return self;
+}
+
+-(void)addBook:(Book *)bookObject {
+    [bookList addObject:bookObject];   //받은 bookObject를 추가
+}
+-(NSString *)showAllBook {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    
+    for(Book *bookTemp in bookList) {
+        //누적시키기
+        [strTemp appendString:@"Name: "];
+        [strTemp appendString:bookTemp.name];
+        [strTemp appendString:@"\n"];
+        [strTemp appendString:@"genre: "];
+        [strTemp appendString:bookTemp.genre];
+        [strTemp appendString:@"author: "];
+        [strTemp appendString:bookTemp.author];
+    }
+    return strTemp;
+}
+
+@end
+
+----------------------
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+#import "BookManager.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint];
+        
+        Book *book2 = [[Book alloc]init];
+        book2.name = @"누구를 위하여 종을 울리나";
+        book2.genre = @"전쟁소설";
+        book2.author=@"헤밍웨이";
+        
+        [book2 bookPrint];
+        
+        Book *book3 = [[Book alloc]init];
+        book3.name = @"죄와 벌";
+        book3.genre = @"사실주의";
+        book3.author=@"톨스토이";
+        
+        [book3 bookPrint];
+        
+        BookManager *myBook = [[BookManager alloc]init];
+        [myBook addBook:book1];
+        [myBook addBook:book2];
+        [myBook addBook:book3];
+        
+        //리턴이 문자열이라서 NSLog로 찍어야함
+        NSLog(@"%@", [myBook showAllBook]);
+        
+    }
+}
+======================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
