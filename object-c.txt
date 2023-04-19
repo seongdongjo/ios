@@ -828,6 +828,274 @@ int main(int argc, char * argv[]) {
     }
 }
 ======================================================
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+-------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+----------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+-------------------------------
+//
+//  BookManager.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+//배열이 몇개들어올지 모르니까 늘어날수도있어서 mutable로 한다
+@class Book; //컴파일오류 방지하기 위해 선언-> 컴파일이 빨라진다. import하는것보다
+@interface BookManager : NSObject { //BookManager 클래스안에 bookList라는 변수가있다.
+    NSMutableArray *bookList;
+}
+
+-(void)addBook:(Book *)bookObject;  //book객체를 인자로받는다
+-(NSString *)showAllBook;
+-(NSUInteger)countBook; //책 갯수
+-(NSString *)findBook:(NSString *)name; //책검색, 없으면 nil반환
+-(NSString *)removeBook:(NSString *)name;
+
+@end
+
+
+---------------------------------
+//
+//  BookManager.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "BookManager.h"
+#import "Book.h"
+
+@implementation BookManager
+    //초기화코드
+-(id)init {
+    self = [super init];
+    if(self) {
+        bookList = [[NSMutableArray alloc]init];
+    }
+    return self;
+}
+
+-(void)addBook:(Book *)bookObject {
+    [bookList addObject:bookObject];   //받은 bookObject를 추가
+}
+-(NSString *)showAllBook {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    
+    for(Book *bookTemp in bookList) {
+        //누적시키기
+        [strTemp appendString:@"Name: "];
+        [strTemp appendString:bookTemp.name];
+        [strTemp appendString:@"\n"];
+        [strTemp appendString:@"genre: "];
+        [strTemp appendString:bookTemp.genre];
+        [strTemp appendString:@"author: "];
+        [strTemp appendString:bookTemp.author];
+    }
+    return strTemp;
+}
+
+-(NSUInteger)countBook {
+    return [bookList count];
+}
+
+-(NSString *)findBook:(NSString *)name {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    for (Book *bookTemp in bookList) {
+        if([bookTemp.name isEqualToString:name]) { //문자열비교
+            [strTemp appendString:@"Name: "];
+            [strTemp appendString:bookTemp.name];
+            [strTemp appendString:@"\n"];
+            [strTemp appendString:@"genre: "];
+            [strTemp appendString:bookTemp.genre];
+            [strTemp appendString:@"author: "];
+            [strTemp appendString:bookTemp.author];
+            
+            return strTemp;
+        }
+    }
+    return nil;
+}
+-(NSString *)removeBook:(NSString *)name {
+    for(Book *bookTemp in bookList) {
+        if([bookTemp.name isEqualToString:name]) {
+            [bookList removeObject:bookTemp];
+            return name;
+        }
+    }
+    return nil;
+}
+
+@end
+
+------------------------------------------
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+#import "BookManager.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint];
+        
+        Book *book2 = [[Book alloc]init];
+        book2.name = @"누구를 위하여 종을 울리나";
+        book2.genre = @"전쟁소설";
+        book2.author=@"헤밍웨이";
+        
+        [book2 bookPrint];
+        
+        Book *book3 = [[Book alloc]init];
+        book3.name = @"죄와 벌";
+        book3.genre = @"사실주의";
+        book3.author=@"톨스토이";
+        
+        [book3 bookPrint];
+        
+        BookManager *myBook = [[BookManager alloc]init];
+        [myBook addBook:book1];
+        [myBook addBook:book2];
+        [myBook addBook:book3];
+        
+        //리턴이 문자열이라서 NSLog로 찍어야함
+        NSLog(@"%@", [myBook showAllBook]);
+        NSLog(@"count : %li", [myBook countBook]);  //Unsigned는 li로 출력
+        
+        NSString *strTemp = [myBook findBook:@"죄와 벌"];
+        if(strTemp != nil) {
+            NSLog(@"%@", strTemp);
+        }
+        else {
+            NSLog(@"찾으시는 책이 없네요");
+        }
+        
+        NSString *removeResult = [myBook removeBook:@"죄와 벌"];
+        if(removeResult != nil) {
+            NSLog(@"%@ 책을 지웠습니다.", removeResult);
+        }else {
+            NSLog(@"찾으시는 책이 없네요");
+        }
+        NSLog(@"%@", [myBook showAllBook]);
+    }
+    return 0;
+}
+
+===========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
