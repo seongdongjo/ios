@@ -1656,12 +1656,46 @@ vpn관리에서 뒤로가기버튼을 누르면 스택에 있는 vpn관리 Contr
 
 =============================================
 #) 실습(기존에 스토리보드에서 제공하는 걸 써보자)
-1.navigation controller를 버튼 추가하는 것처럼 검색해서 추가한다. -> navigation controller여서 상단에 네비게이션 바가 생성된다.
-2.생성되면 root view는 지운다.
-3.추가된 navigation controller를 클릭해서 옆에 속성을 보면 is initial view controller를 클릭하면 최초의 화면이 된다. -> 우클릭 드래그해서 (기존의)view controller에 놓는다.(root선택)
-ViewController에는 내가 만든 버튼이있다.("Sugue로 push" 라는 이름을 가진 버튼을 만들었다. 이걸클릭하면 상단에 back버튼이 생기면서 SugueViewController로 화면이 바뀐다)
-5. 프로젝트 우클릭 - new file - cocoa - 이름은 SuguePushViewController, subclass of는 UIViewController로 선택
-6. SuguePushViewController에서(폰그림상단에 클릭) SuguePushViewContriller로 이름 설정, 그러면 옆에 main에 이름이 바뀜(Segue로)
+1.app생성하면 mainStoryboard를 클릭하고 + 버튼을 클릭해서
+  navigation controller를 버튼 추가하는 것처럼 검색해서 추가한다. -> navigation controller여서 상단에 네비게이션 바가 생성된다.
+2.생성되면 root viewcontroller는 지운다.
+
+여기까지가 navigation controller | viewController 화면이다.
+
+3. 여기서 navigation controller에서 우클릭해서 viewcontroller로 끌어다놓으면 선택할 수 있는 항목이 생기는데 root viewcontroller선택하면된다.
+4.추가된 navigation controller를 클릭해서 옆에 속성(inspector)을 보면 is initial view controller를 클릭하면 navigation controller가 최초의 화면이 된다.
+
+이제버튼을 view controller에 추가해보자
+버튼이름은 segue로 push, segue로 present, 코드로 push, 코드로 present
+여기서 segue로 push는 스토리보드에서 화면전환용 segueway를 사용해서 navigation stack에 새로운화면은 push할것이다.
+segue present는 segueway를 사용해서 navigation controller에 root viewcontroller화면위에 새로운 화면으로 덮어지게끔
+코드로 push는 코드를 이용해서 navigation stack에 새로운 화면을 push할것이고 present는 navigation controller에 root viewcontroller화면위에 새로운 화면으로 덮어지게끔한다.
+
+5. viewcontroller를 하나 더 추가해보자(uiviewcontroller 선택)
+
+navigation controller | viewcontroller | viewcontroller
+                          segue로 push       segue로 push
+                          segue로 present    
+                          코드로 push         back button
+                          코드로 present
+                          
+
+back button을 누르게되면 popviewcontroller 메서드를 호출해서 이전화면으로 돌아가게 한다.
+
+만든 viewcontroller를 옆에있는 view controller class에 연결시켜주기위해 
+프로젝트 우클릭 - new file - cocoa - 이름은 SuguePushViewController, subclass of는 UIViewController로 선택
+
+이렇게 되면
+navigation controller | viewcontroller | SeguePushViewController    
+                          segue로 push       segue로 push
+                          segue로 present    
+                          코드로 push         back button
+                          코드로 present
+        
+6. SuguePushViewController에서(폰그림상단에 클릭) 속성(우측) - custom class - SuguePushViewContriller로 이름 설정, 그러면 옆에 main에 이름이 바뀜(Segue로)
+viewcontroller(Seguepushviewcontroller) 클래스와 storyboard scene이 연결이된다.
+
+
 7. viewController에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면 상단에 back 버튼이 생긴다.
 8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView -> 상단 back -> viewController 자유롭게 이동한다.
 
