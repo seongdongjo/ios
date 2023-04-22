@@ -1761,6 +1761,7 @@ class SuguePresentViewController: UIViewController {
 //그래서 전체화면으로 채울려면 컨트롤러에 연결되 선을 클릭하고 속성에 Show the attributes inspector 항목에 presentation을 fullscreen으로 선택하면된다.
 //viewController -----  SuguePresentViewController
 
+========================================================
 
 
 

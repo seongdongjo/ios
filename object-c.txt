@@ -1054,6 +1054,53 @@ int main(int argc, char * argv[]) {
 }
 
 ===========================================================
+#)ios에서 푸시알림을 구현하기 위해 지원하는 방법은 두가지가 있다.
+
+
+#) APNs란 각 Device의 앱으로 푸시알림을 보내주게된다.
+
+provider ---  apns --- device
+
+provider가 apns로 메시지를 보내게 되면 이곳에서 인증서를 확인해서 신뢰하는 provider인지 확인한다.
+확인이되면 device로 알림을 보내주게된다.
+
+그래서 provider와 apns 사이의 인증서, apns와 device간의 인증서가 필요하게된다.
+
+즉, 모든 푸시알림을 보내기 위햐ㅐ 중재를 하고있는 센터라고 생각
+
+apns는 bundle Identifier로 프로젝트를 식별한다. 그렇기 때문에 애플개발자에서 등록해줘야한다.
+이제 provider측에서 사용할 증명서를 발급해야한다.
+그렇게 발급해야만 provider에서 apns로 메시지를 보내고 apns에서 각 디바이스로 푸시메시지를 보낼수있기때문이다.
+
+만든 bundle Identifier에 들어가서 push Notifications을 추가
+
+keys에 + 버튼을 눌러 Apple Push Notifications service (APNs) 키를(p8) 추가하면
+이 키는 한번만 다운받을 수 있고, 키파일은 firebase에 사용된다.
+
+순서는 app이 apns에게 device token을 요청한다. 그래야 apns가 푸시알림을 보낼수있다.
+근데 device token은 apns에서 얻을 수 있기때문에 우리 app이 apns에 요청하는 것이다.
+이렇게 apns가 device token을 알려주면 app이 push server(provider)에게 내 device token은 이거야!! 라고 보냄
+여기까지가 연결과정임
+
+이제 provider가 메시지를 보내고 싶을때는 apns에게 "device token은 이거고 보내고싶은 메시지는 이거야" 라고 apns에게 보낸다.
+이때 apns와 provider는 TLS통신을 하기 때문에 pushserver에 인증서가 준비되어있어야한다.(p8)
+
+그 후, apns는 해당 device token으로 데이터를 보낸다.
+background 상태이면 os에서 처리해서 띄우고,
+Foreground 상태이면 AppDelegate에 정의해놓은 방식 대로 APP위에 띄워질 것이다.
+
+device token은 푸시가 전송되는 app주소라고 보면된다.
+
+------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
