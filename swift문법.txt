@@ -1799,11 +1799,59 @@ class SuguePresentViewController: UIViewController {
     }
 }
 
-//그래서 전체화면으로 채울려면 컨트롤러에 연결되 선을 클릭하고 속성에 Show the attributes inspector 항목에 presentation을 fullscreen으로 선택하면된다.
+//그래서 전체화면으로 채울려면 컨트롤러에 연결되있는 선(1.에서 suguePresentViewcontroller로 연결되있는)을 
+//클릭하고 속성에 Show the attributes inspector 항목에 presentation을 fullscreen으로 선택하면된다.
 //viewController -----  SuguePresentViewController
 
 ========================================================
+#) 이제 코드로 push를 구현해보자 -> navigation 스택에 새로운화면이 push되게
 
++버튼으로 viewcontroller 추가하자(label, button까지)
+
+이제 viewcontroller 클래스를 만들자 -> 프로젝트폴더우클릭 -> new file -> cocoa touch class -> 이름은 CodePushViewController
+
+그다음에 상단에 첫번째 동그라미 선택해서 custom class에 CodePushViewController로 이름넣자.
+그다음에 rootviewController(1.의 viewcontroller) 의 "코드로 push" 항목을 클릭 한후에 assistant를 켜서
+1. 의 "코드로 push"를 드래그 해서 1.의 viewcontroller class에 갖다놓으면된다.
+
+import UIKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    @IBAction func tapCodePushButton(_ sender: UIButton) { //"코드로 push" 버튼에 대한 액션
+        //navigation 스택에 codePushviewController가 푸시되게끔해보자
+        //먼저, 스토리보드에 있는 viewcontroller를 instance화 해줘야한다.
+        //identifier매개변수에는 스토리보드 id를 넘겨줘야한다.
+        //스토리보드id는 main story보드에서 codePushViewController를 클릭하면 속성에 custom class밑에
+        //storyboardid 입력란이 있다. 거기에 CodePushViewController를 입력
+        //이거를 identifier 매개변수에 아래처럼 입력
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: 
+        "CodePushViewController") else { return }   
+        self.navigationController?.pushViewController(viewController, animated: true) //위에서 instance화한 viewController를 넘긴다. 
+        // 이렇게되면 navigation stack에 새로운화면이 푸시가된다.
+        
+    }
+}
+
+
+//이제 backbutton을 구현해보자
+CodePushViewController 화면에서 assistant를 켜서 backbutton을 우측으로 드래그해서 놓는다.
+import UIKit
+
+class CodePushViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
 
 
 
