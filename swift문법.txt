@@ -1686,7 +1686,7 @@ back button을 누르게되면 popviewcontroller 메서드를 호출해서 이�
 프로젝트 우클릭 - new file - cocoa - 이름은 SuguePushViewController, subclass of는 UIViewController로 선택
 
 이렇게 되면
-navigation controller | viewcontroller | SeguePushViewController    
+navigation controller | 1. viewcontroller | 2. SeguePushViewController    
                           segue로 push       segue로 push
                           segue로 present    
                           코드로 push         back button
@@ -1694,17 +1694,17 @@ navigation controller | viewcontroller | SeguePushViewController
         
 6. SuguePushViewController에서(폰그림상단에 클릭) 속성(우측) - custom class - SuguePushViewContriller로 이름 설정, 그러면 옆에 main에 이름이 바뀜(Segue로)
 viewcontroller(Seguepushviewcontroller) 클래스와 storyboard scene이 연결이된다.
-
-
-7. viewController에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면 상단에 back 버튼이 생긴다.
-8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView -> 상단 back -> viewController 자유롭게 이동한다.
+7. 1.의 viewController에서 "Sugue로 Push"를 우클릭해서 드래그로 SuguePushViewController에 끌어놓으면 action segue항목에서 show클릭하면
+   1.과 2.사이에 '->' 화살표가 생기면서 상단에 back 버튼이 생긴다.
+여기서 화살표가 segueway인데 세그웨이는 단방향 화면전환이다. 
+8. 컴파일해서 폰으로 보면 segue push 누르면 -> SuguePushView로이동 -> 상단 back(이거는 navigation controller의 navigation bar를 이용) -> viewController 자유롭게 이동한다.
 
 현재구성이                                         
                                             -----ViewController-----              ----SuguePushViewController------
                                             |                                               <Back
                                             |   
 -----navigation controller ----             |    Segue로 push(누르면이동)           ----->       segue로 push
-|                         |                 |                                                 
+|                         |                 |    ...                                         
 |                         |       ----->     |                                                back button
 |                         |
 |                         |                   
@@ -1712,8 +1712,13 @@ viewcontroller(Seguepushviewcontroller) 클래스와 storyboard scene이 연결�
 
 
 
-이제 우리는 back button에 액션을 줄것이다.(상단에 <back은 잘 동작한다)
-백버튼을 드래그해서 끌어당기면 SuguePushViewController 소스에 놓으면 아래처럼 된다.
+이제 우리는 back button에 액션을 줄것이다.(상단에 <back 말고)
+SuguePushViewController 위에 3개 아이콘이보이는데 첫번째선택 후 햄버거모양 클릭 - assistant 클릭하면
+좌측에는 suguepush scene화면이(폰) 우측에는 SuguePushViewController class가 보인다.
+
+좌측에서 이제
+backbutton을 드래그해서 끌어당기면 SuguePushViewController 소스에 놓으면 아래처럼 된다.
+버튼액션함수이름은 tapBackButton이다.
 
 //
 //  SeguePushViewController.swift
@@ -1732,9 +1737,12 @@ class SeguePushViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     @IBAction func tapBackButton(_ sender: UIButton) {
-        //BackButton누르면 이전화면으로(popViewController쓰면됨)
+        //BackButton누르면 이전화면으로(navigation controller의 popViewController메서드쓰면됨)
+        
         self.navigationController?
             .popViewController(animated: true)
+            
+        //만약 navigation 스택의 첫번째로 가고싶으면?? -> root viewcontroller로이동하고싶을때
         self.navigationController?
             .popToRootViewController(animated: true) // 제일 처음 스택으로 간다.
     }
@@ -1742,8 +1750,10 @@ class SeguePushViewController: UIViewController {
 
 
 ===============================================================
-//이제 하나 더 추가 
-현재구성이                                         
+//이제 push present(segue로 present)를 써보자
+//segueway를 이용해서 viewcontroller에서 다른 viewcontroller를 호출해서 화면을 전환해보자
+//그러면 + 버튼으로 viewcontroller추가해보자(SuguePresentViewController)
+여기까지가 아래화면 구성도이다.
                                             -----ViewController-----              ----SuguePushViewController------
                                             |                                               <Back
                                             |   
@@ -1756,20 +1766,17 @@ class SeguePushViewController: UIViewController {
 
                                                                             ----> -----SuguePresentViewController-----
                                                                                          
-                                                                                          Sugue로 present
+                                                                                          Sugue로 present(label)
                                                                                           back button
 
 
 
-
-
-1. View COntroller 생성
 2. 프로젝트 파일 우클릭 - new file - cocoa touch class - 이름은 SuguePresentViewController
 3. 만든 view Controller위에 네비게이션바 첫번째 동그라미 선택 - custom class에 이름을 SuguePresentViewController 라고 하고
-4. viewController에서 "Sugue로 present" 드래그해서 SuguePresentViewController로 드래그해서 놓으면 segue방식은 present modally를 선택
+4. 1.의 viewController에서 "Sugue로 present"를 드래그해서 SuguePresentViewController로 드래그해서 놓으면 segue방식은 present modally를 선택
 이러면, 현재 화면(새로운 뷰컨트롤러로)으로 덮어씌워지게 된다.
 
-5. back button을 활성화하기 위해 SuguePresentViewController 소스에 끌어다 놓으면 된다.
+5. back button을 활성화하기 위해 SuguePresentViewController 소스에 끌어다 놓으면 된다.(assistant를 켜서 좌측에는 모바일화면 - 우측에는 클래스코드)
 //
 //  SuguePresentViewController.swift
 //  ScreenTransitionExample
