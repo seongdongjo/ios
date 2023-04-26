@@ -284,10 +284,6 @@ new - cocoa class - 클래스이름은 Vehicle로 만들면 m, h 파일이 생�
 -----------------------
 //
 //  Vehicle.m
-//  FirstProject
-//
-//  Created by 조성동 on 2023/04/17.
-//
 
 #import "Vehicle.h"
 
