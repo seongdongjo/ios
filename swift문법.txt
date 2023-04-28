@@ -4,7 +4,7 @@ swift 변수사용법
 //let a: Int = 100
 let a: Int = 100
 
-a = 200 //에러난다(상수니까 안변한다!!)
+a = 200 //에러난다(상수니까 안변한다)
    
 //변수
 //var 변수명: 데이터 타입 = 값
@@ -989,7 +989,7 @@ print("reduce \(reduceResult)")  //reduce 15
 
 ===============================================
 #) 클로저라고 하면 보통 익명함수를 뜻하는 걸로 알텐데 
-func 키워드를 이용해 이름을 붙여주는 함수들도 모두 클로저이다!!
+func 키워드를 이용해 이름을 붙여주는 함수들도 모두 클로저이다.
 
 클로저에는 Named Closure, Unnamed Closure 가있다.
 
@@ -1242,6 +1242,30 @@ sum(of:) // (Int...) -> ()
 sum(a: b:) // (inout Int, inout Int) -> ()
 
 ========================================================
+// 1. 일반적 함수
+func normalFunc(name: String) {
+}
+// 함수호출
+normalFunc(name: "나리")
+// 함수이름: normalFunc(name:)
+
+// 2. 전달인자 레이블을 사용한 함수
+func usingArgumentLabelFunc(to name: String) {
+}
+// 함수호출
+usingArgumentLabelFunc(to: "나리")
+// 함수이름: usingArgumentLabelFunc(to:)
+
+
+// 3. 전달인자 레이블을 와일드카드 식별자로 사용하는 함수 - 함수호출 시 자바에서처럼 호출
+func usingWildCardLabelFunc(_ name: String) {
+}
+// 함수호출
+usingWildCardLabelFunc("나리")
+// 함수이름: usingWildCardLabelFunc(_:)
+
+========================================================
+
 #)일급객체함수
 swift는 객체지향언어인 동시에 함수형 언어이다.
 그렇기때문에 함수가 1급객체로 취급된다.
@@ -1505,17 +1529,6 @@ closure()
 })()
 
 =========================================================================
-#)클로저 문법 경량화
-1. 트레일링 클로저
-- 파라미터가 클로저 하나인 함수
-func doSomething(closure: () -> ()) {
-	closure()
-}
-//원래는 아래처럼 호출했다.
-doSomething(closure: { () -> () in
-	print("Hello")
-}
-==========================================================================
 //Outlet, Action을 이용하면 코드에서 UI접근이 가능하다.
 //스토리보드에서 버튼요소 클릭하고 우클릭해서 컨트롤러안에 끌어놓으면
 //설정 할 수 있는 항목이 뜬다.
@@ -2081,39 +2094,534 @@ SeguePushVIewController 뷰가 나타났다.
 
 ===================================================
 #)화면간 데이터전송
+rootviewcontroller에서 codepush, codepresentcontroller로 데이터 전송해보자
+CodePushControllerView, CodePresentControllerView에 label을 추가하자
+만든라벨을 각각의 클래스에 드래그드랍
+
+class CodePresentViewController: UIViewController {
+    
+    @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
+    var name: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+class CodePushViewController: UIViewController {
+
+    @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
+    var name: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
+
+
+//다운캐스팅을 통해(as) var name 을 쓸 수 있다.
+import UIKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("ViewController 뷰가 로드되었다.")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("ViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("ViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("ViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("ViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func tapCodePushButton(_ sender: UIButton) { //"코드로 push" 버튼에 대한 액션
+        
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: 
+        "CodePushViewController") as? CodePresentViewController else { return }   
+        
+        //추가된부분
+        viewController.name = "Gunter"
+        
+        self.navigationController?.pushViewController(viewController, animated: true) //위에서 instance화한 viewController를 넘긴다. 
+    }
+    
+    @IBAction func tapCodePresentButton(_ sender: UIButton) {
+        guard let viewController = self.storyboard?.instantiateViewController
+        (identifier: "CodePresentViewController") as? CodePushViewController else {return}
+        viewController.modalPresentationStyle = .fullScreen
+
+        viewController.name = "Gunter"
+
+        self.present(viewController, animated: true, completion: nil)
+    }
+}
+
+//다른화면에 push, present되기전에 name property값을 넘겨주면 전환된 화면으로 데이터를 전달할 수 있다.
+class CodePushViewController: UIViewController {
+
+    @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
+    var name: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let name = name {
+            self.nameLabel.text = name
+            self.nameLabel.sizeToFit()
+        }
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
+
+class CodePresentViewController: UIViewController {
+    
+    @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
+    var name: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let name = name {
+            self.nameLabel.text = name
+            self.nameLabel.sizeToFit() //안잘려서 보이게끔
+        }
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+//이러면 rootviewcontroller에서 "코드로 push" 를 클릭하면 rootviewcontroller에서 전달한 gunter가 잘보인다.
+
+==========================================
+//이전화면이 viewcontroller에 데이터전달해보자
+일단 rootviewcontroller에 label을 하나 추가시키자
+
+그 label을 viewController에 끌어다놓자.
+class ViewController: UIViewController {
+
+    //추가된부분
+    @IBOutlet weak var nameLabel: UILabel!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("ViewController 뷰가 로드되었다.")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("ViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("ViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("ViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("ViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func tapCodePushButton(_ sender: UIButton) { //"코드로 push" 버튼에 대한 액션
+        
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: 
+        "CodePushViewController") as? CodePresentViewController else { return }   
+        
+        viewController.name = "Gunter"
+        
+        self.navigationController?.pushViewController(viewController, animated: true) //위에서 instance화한 viewController를 넘긴다. 
+    }
+    
+    @IBAction func tapCodePresentButton(_ sender: UIButton) {
+        guard let viewController = self.storyboard?.instantiateViewController
+        (identifier: "CodePresentViewController") as? CodePushViewController else {return}
+        viewController.modalPresentationStyle = .fullScreen
+
+        viewController.name = "Gunter"
+
+        self.present(viewController, animated: true, completion: nil)
+    }
+}
+
+
+//이제 codepresentview에서 이전화면인 viewcontroller로 데이터를 전달해보자
+
+protocol SendDataDelegate: AnyObject {
+    func sendData(name: String)
+}
+
+class CodePresentViewController: UIViewController {
+    
+    @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
+    var name: String?
+    
+    //프로토콜타입변수 정의
+    //delegate패턴을 쓸때는 delegate변수앞에 weak를 붙여줘야한다. 강한 순환참조 때문에 메모리 누수
+    weak var delegate: SendDataDelegate? 
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let name = name {
+            self.nameLabel.text = name
+            self.nameLabel.sizeToFit() //안잘려서 보이게끔
+        }
+
+    }
+    @IBAction func tapBackButton(_ sender: UIButton) {
+        self.delegate?.sendData(name: "Gunter")  //deletegate의 함수이용해서 데이터넘김
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+//다시 viewcontroller를 보자
+class ViewController: UIViewController, SendDataDelegate {
+
+    @IBOutlet weak var nameLabel: UILabel!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("ViewController 뷰가 로드되었다.")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("ViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("ViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("ViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("ViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func tapCodePushButton(_ sender: UIButton) { //"코드로 push" 버튼에 대한 액션
+        
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: 
+        "CodePushViewController") as? CodePresentViewController else { return }   
+        
+        viewController.name = "Gunter"
+        
+        self.navigationController?.pushViewController(viewController, animated: true) //위에서 instance화한 viewController를 넘긴다. 
+    }
+    
+    @IBAction func tapCodePresentButton(_ sender: UIButton) {
+        guard let viewController = self.storyboard?.instantiateViewController
+        (identifier: "CodePresentViewController") as? CodePushViewController else {return}
+        viewController.modalPresentationStyle = .fullScreen
+
+        viewController.name = "Gunter"
+        
+        //다른화면이 호출되기 전에 delegate를 위임받자(위임받을려면 클래스옆에 프로토콜채택해야됨)
+        viewController.delegate = self
+        
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
+    //프로토콜을 준수하기 위해서
+    func sendData(name: String) {
+        self.nameLabel.text = name
+        self.nameLabel.sizeToFit() //텍스트에 맞게 라벨사이즈 조절
+    }
+}
+
+//실행을 해보면 viewcontroller에서 "코드로 present"를 클릭하고 backbutton을 클릭하면
+//viewcontroller 라벨에 받은 Gunter 라고 적혀있다.
+//이렇게 delegate패턴을 이용하면 이전화면으로 데이터를 전달할 수 있다.
+
+=========================================================
+#)이제 segueway 방식에서의 값을 전달해보자
+//먼저, seguepushcontroller에서 label을 하나추가한다.
+//assistant를 켜서 seguepushcontroller에서 만든 라벨을 끌어다 seguepushviewcontroller에 가져다 놓는ㄷ다,
+class SeguePushViewController: UIViewController {
+    //추가된 라벨부분
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    //segueway방식에서 전환되는 화면으로 데이터 전달하는 제일좋은 위치는
+    //prepare메서드이다. segueway실행직전에 시스템에 의해 자동호출된다.
+    //그럼 이제 viewcontroller에서 설정해보자
+    
+    override func viewDIdLoad() {
+        super.viewDidLoad()
+        print("SeguePushViewController 뷰가 로드되었다")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("SeguePushViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("SeguePushViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("SeguePushViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("SeguePushViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func _tapBackButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+}
+
+
+
+class ViewController: UIViewController, SendDataDelegate {
+
+    @IBOutlet weak var nameLabel: UILabel!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("ViewController 뷰가 로드되었다.")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("ViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("ViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("ViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("ViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func tapCodePushButton(_ sender: UIButton) { //"코드로 push" 버튼에 대한 액션
+        
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: 
+        "CodePushViewController") as? CodePresentViewController else { return }   
+        
+        viewController.name = "Gunter"
+        
+        self.navigationController?.pushViewController(viewController, animated: true) //위에서 instance화한 viewController를 넘긴다. 
+    }
+    
+    @IBAction func tapCodePresentButton(_ sender: UIButton) {
+        guard let viewController = self.storyboard?.instantiateViewController
+        (identifier: "CodePresentViewController") as? CodePushViewController else {return}
+        viewController.modalPresentationStyle = .fullScreen
+
+        viewController.name = "Gunter"
+        
+        //다른화면이 호출되기 전에 delegate를 위임받자(위임받을려면 클래스옆에 프로토콜채택해야됨)
+        viewController.delegate = self
+        
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //전환하려는 viewcontroller의 인스턴스를 가져올수있다, 다운캐스팅해주자
+        if let viewController = segue.destination as? SuguePushViewController {
+            viewController.name = "Gunter"
+        }
+    }
+    
+    
+    //프로토콜을 준수하기 위해서
+    func sendData(name: String) {
+        self.nameLabel.text = name
+        self.nameLabel.sizeToFit() //텍스트에 맞게 라벨사이즈 조절
+    }
+}
 
 
 
 
 
+//다시 SeguePushViewController에서 설정
+
+class SeguePushViewController: UIViewController {
+    @IBOutlet weak var nameLabel: UILabel!
+    var name: String?
+    
+    override func viewDIdLoad() {
+        super.viewDidLoad()
+        print("SeguePushViewController 뷰가 로드되었다")
+        //전달받은 값을 label에 띄워보자
+        if let name = name {
+            self.nameLabel.text = name
+            self.nameLabel.sizeToFit()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("SeguePushViewController 뷰가 나타날 것이다.")
+    }
+    
+    overried func ViewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("SeguePushViewController 뷰가 나타났다.")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("SeguePushViewController 뷰가 사라질 것이다.")
+    }
+    
+    overried func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("SeguePushViewController 뷰가 사라졌다.")
+    }
+    
+    @IBAction func _tapBackButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+}
+
+//이렇게되면 SeguePushViewCOntroller의 label에 잘찍힌다.
+===============================================================
+#) LED 전광판 만들기(LEDBoard project)
+프로젝트만들고  -> mainstroyboard에 가서 +버튼으로 navigation 추가 후 기존에 navigation이랑
+연결되있는 controller는 지운다. 그 후 화살표를(진입점) navigation controller로 옮긴다
+
+
+#)화면구성
+ --->(진입점) navigation controller  |   viewcontroller
+
+그 후 navigation controller 우클릭 끌어당겨서 viewcontroller에 놓으면 항목이 생기는데
+segueway메뉴에서 root view controller로 선택하고 놓는다.
+이렇게되면 오른쪽의 viewcontroller가 navigation controller의 root view controller가 된다.
+
+그 후 viewcontroller에 label을 하나 추가시키자(중앙에)
+여기까지 화면구성이 아래와같다.
+
+--> 1. navigation controller --> 2. viewcontroller
+                                       label
+                                  
+
+여기서 viewcontroller를 클릭하고 속성에서 background를 black으로 한다.
+이러면 label이 안보인다. 좌측에 viewcontrollerscene에서 label 클릭후 색상바꾼다.
+그후 viewcontroller 상단에 네비게이션쪽을 클릭한 후에 + 버튼 -> 
+bar button item 추가(휴대폰 우측 모서리 상단에 끌어다놓기) -> 이름을 설정으로 변경
+
+
+------------
+#)이제 설정으로 들어갔을 때 화면구성해보자
+먼저 mainstoryboard에 viewcontroller를 하나 추가하자
+
+--> 1. navigation controller --> 2. viewController  --> 3. viewController
+                                       label
+
+그다음에  2.의 viewcontroller에서 만들었던 상단의 설정 버튼을 우클릭드래그해서 3.에 놓으면된다.
+그러면 segue선택항목에 show 클릭하면된다. 그러면 좌측상다네<back 버튼이생긴다.
+
+그다음에 3.의 viewcontroller에서 label, textfield를 추가한다.
+textfiled는 한줄밖에 입력안된다. 여러줄할려면 UITextview객체 이용해야함
+
+그다음에 label, textfied를 하나로 묶을 것이다. 이 두개의 UIObject를 stackview로 묶는방법은
+두개를 드래그해서 선택한다음에 맨아래에 Embed in view -> stack view 클릭
+이렇게되면 두개의 uiobject가 stackview로 묶이게된다.
 
 
 
+--> 1. navigation controller --> 2. viewController  --> 3. viewController
+                                       label                label
+                                                            textfield
+                                                            
+//그 다음에 옆에 속성에서 stackview로 잡힌상태에서 속성에 spcing을 통해 lable, textfield 간격을
+//15로해서 줄인다.
 
+#)label, button 추가
 
+3. viewController
+전광판에 표시할 글자(label)
 
+|-------------|  (textfield)
+|-------------|
 
-
-
-
-
-
-
-
-
-
-
-
+텍스트 색상 설정   (label)
  
+노란색 자주색 초록색  (button)
 
 
+//그다음에 노란색, 자주색, 초록색 버튼들을 stackview로 묶고
+//그 묶은거에다가 텍스트 색상 설정까지 묶는다.
+//그 다음에 만든 stackview를 복사해서 하나 더 만든다.
+//거기에 버튼(저장) 추가
+
+전광판에 표시할 글자(label)
+
+|-------------|  (textfield)
+|-------------|
+
+텍스트 색상 설정   (label)
+ 
+노란색 자주색 초록색  (button)
 
 
+배경 색상 설정 (label)
+
+검정색 파란색 주황색  (button)
+        
+        저장
+        
+===============================================
+//설정화면을 좀 더 예쁘게 꾸며보자
 
 
-
-
-
+                                                     
+ 
 
 
 
