@@ -1,0 +1,1277 @@
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    NSString * appDelegateClassName;
+    @autoreleasepool {
+        //모든코드는 이안에서 작성
+        int wheel = 4; //int float double long - primitive type
+        int seats = 2;
+        NSLog(@"wheel: %i, seats: %i", wheel, seats);
+        
+        appDelegateClassName = NSStringFromClass([AppDelegate class]);
+    }
+    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+}
+
+=======================================================
+@interface 의 의미는 클래스를 정의한다는 뜻이다. 즉, 자바의 interface와 다르다.
+ex) @interface SimpleClass : NSObject  (상속을 받는다, NSO라는)
+    @end
+
+
+-------------------------------
+#)실제 예시
+(선언부)
+@interface XYZPerson : NSObject(최상위다, 생략해도 상관없음)
+- (void)sayHello;
+@end
+
+(구현부)
+#import "XYZPerson.h"
+@implementation XYZPerson
+-(void)sayHello {
+    NSLog(@"Hello, World!");
+}
+@end
+--------------------------------
+class, instance  == object
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    int wheels;
+    int seats;
+}
+
+//member method
+-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+-(void)setSeats:(int)s;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+-(void)setWheels:(int)w {
+    wheels = w;
+}
+
+-(void)setSeats:(int)s {
+    seats = s;
+}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //class는 *넣어줘야한다
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        
+        //[Receiver Message] Message는 함수이름, 누구의 메시지인지 hello객체의
+        [hello setWheels:4];
+        [hello setSeats:2];
+        [hello print];
+    }
+    return 0;
+}
+
+===============================================
+여기서 new는 메모리 힙영역에 동적할당 == alloc과 init을 합쳐놓은것이다 -> self사용가능
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    int wheels;
+    int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+@property int wheels; //getter, setter 해준다
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print{
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
+        
+        [hello setWheels:4];
+        [hello setSeats:2];
+        
+        NSLog(@"wheels: )
+    }
+    return 0;
+}
+====================================================
+@interface Vehicle : NSObject {
+    //member variable 영역
+    //int wheels;
+    //int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+
+//getter, setter 이름 재정의해보기 setWheels를 wheels로(setter=wheels:), wheels를 getWheels로(getter=getWheels)
+//setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
+@property (getter=getWheels,setter=wheels:) int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print{
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
+        
+        //@property (getter=getWheels) int wheels; 이거에 인해서 [hello wheels] 는 못부른다.
+        //[hello getWheels] 이렇게 해야한다.
+        [hello getwheels]
+        [hello wheels:4]
+        
+    }
+    return 0;
+}
+
+========================================================
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+    //int wheels;
+    //int seats;
+}
+
+//member method
+//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
+//-(void)setSeats:(int)s;
+//-(int)wheels; //getter 메서드정의만
+//-(int)seats;
+
+//getter, setter 이름 재정의해보기 setWheels를 wheels로, wheels를 getWheels로
+//setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
+@property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+//-(void)setWheels:(int)w {
+//    wheels = w;
+//}
+//
+//-(void)setSeats:(int)s {
+//    seats = s;
+//}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+//-(int)wheels {
+//    return wheels;
+//}
+//-(int)seats {
+//    return seats;
+//}
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        Vehicle *hello = [Vehicle new]  //인스턴스 생성
+        
+        //[hello wheels] 이렇게 접근하는 방식은 옛날방식이다.
+        hello.wheels;
+        hello.seats;
+        hello.wheels = 4;
+        hello.seats = 2;
+        
+    }
+    return 0;
+}
+
+====================================================
+#)이제 파일을 분리해서 해보자.
+new - cocoa class - 클래스이름은 Vehicle로 만들면 m, h 파일이 생긴다.
+
+//
+//  Vehicle.h
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/17.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Vehicle : NSObject {
+    //member variable 영역
+}
+
+@property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
+@property int seats;
+
+//인자를 2개 받게된다.
+-(void)setWheels:(int)w Seats:(int)s;
+
+-(void)drawCircleX:(int)x Y:(int)y R:(int)r;
+-(void)drawCircleXYR:(int)x :(int)y :(int)r;
+
+-(void)print;   //받을게 없어서 이렇게 정의
+
+@end
+
+
+-----------------------
+//
+//  Vehicle.m
+
+#import "Vehicle.h"
+
+@implementation Vehicle
+@synthesize wheels;  //property해주면 이거 같이해주면 됨.
+@synthesize seats;
+
+-(void)setWheels:(int)w Seats:(int)s {
+    wheels = w;
+    seats = s;
+}
+
+-(void)print {
+    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+}
+@end
+
+--------------------------
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+//애플에서 제공하는거는 꺽새(<>) 로 , 우리가 만든건 "" 로 import한다.
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Vehicle.h"
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //Vehicle *hello = [Vehicle new];  //인스턴스 생성
+        Vehicle *hello = [[Vehicle alloc]init];
+        
+        [hello setWheels:4 Seats:2];
+        [hello drawCircleXYR:1 :3 :2];
+        
+        NSLog(@"wheels: %i, seats: %i", hello.wheels, hello.seats);
+    }
+    return 0;
+}
+
+=================================================
+//
+//  main.m
+//  FirstProject
+//
+//  Created by 조성동 on 2023/04/13.
+//
+
+//애플에서 제공하는거는 꺽새(<>) 로 , 우리가 만든건 "" 로 import한다.
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Vehicle.h"
+
+int main(int argc, char * argv[]) {
+
+    @autoreleasepool {
+        //Vehicle *hello = [Vehicle new];  //인스턴스 생성
+        Vehicle *hello = [[Vehicle alloc]init];
+        
+        [hello setWheels:4 Seats:2];
+        [hello drawCircleXYR:1 :3 :2];
+            
+        if(hello.wheels == 4) {
+            NSLog(@"wheels: 4");
+        }else {
+            NSLog(@"no");
+        }
+        
+        switch(hello.seats) {
+            case 4:
+                NSLog(@"wheels: 4");
+                break;
+            case 3:
+                NSLog(@"wheels: 2");
+                break;
+            default:
+                NSLog(@"NO");
+                break;
+        }
+        
+        for(int i=0l i<hello.wheels; i++) {
+            NSLog(@"wheels: %i", i);
+        }
+        int i = 0;
+        while(i<hello.seats) {
+            NSLog(@"seats: %i", i);
+            i++;
+        }
+    }
+    return 0;
+}
+
+=====================================================
+foundation framework -> 안에 최상위 클래스 NSObject 그 밑에 많다.
+
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        //객체를 만들어야 쓸 수 있다.
+        NSString *str = [[NSString alloc]init]; //인스턴스 오브젝트 생성
+        str = @"This is NSString"; //문자열이라는 의미이다.(@)
+        NSLog(@"str : %@", str);
+        
+        //위에 방식은 불편해서 바로 쓰자
+        //initwith라고 시작하는 메서드들을 convenience method라고하는데
+        //동적할당을 하면서 초기화까지 같이하기 위해서 new 말고 alloc[init을 쓴다.
+        NSString *str1 = [[NSString alloc]initWithString:@"This is NSString"];
+        NSLog(@"str : %@", str);
+        
+        //근데 NSString은 많이 쓰이니까 NSString에서만 아래처럼 가능
+        NSString *str2 = @"This is NSString";
+        NSLog(@"str2: %@", str);
+    }
+    return 0;
+}
+
+============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSString 메서드 중에 substringFromIndex가 있는데 문서에서 보면
+       // -(NSString *)substringFromIndex:(NSUInteger)anIndex 이렇게되있다.
+       // 반환값은 NSString이고 인자는 NSUInteger이다(양수->부호가없는)
+    
+        
+        
+        NSString *str = @"This is NSString";
+        
+        NSString *result;
+        result = [str substringFromIndex:6];  //str의 메서드인 substringFromIndex에 인자를 던짐 -> 문자열반환
+        result = [str substringToIndex:3]; //Thi
+        result = [[str substringToIndex:11]substringFromIndex:8]; //This is NSS까지 자르고 NSS까지 다시 자른다. -> 결과는 NSS
+        result = [[str substringFromIndex:8]substringToIndex:3]; //NSString자르고 NSS까지자르고
+        
+        NSLog(@"result : %@", result); //s NSString
+        
+        //NSString이 immutable한 클래스인데 -> 중간에 값을 바꿀수없다. 통째로는 가능한데 부분부분 수정이안된다.
+        //그래서 위에처럼 리턴이 가능하다.
+        
+        
+    }
+    return 0;
+}
+
+============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSString 메서드 중에 substringWithRange가 있는데 문서에서 보면
+       // -(NSString *)substringWithRange:(NSRange)aRange 로 되어있다.
+       //NSRange를 보면 구조체이다.
+       
+        // location부터 length까지 잘라라
+        //typedef struct _NSRange {
+        //    NSUInteger location;
+        //    NSUInteger length;
+        //}NSRange;
+        
+        NSString *str = @"This is NSString";
+        
+        NSString *result;
+        //NSMakeRange는 구조체를 만드는 메서드이다.
+        result = [str substringWithRange:NSMakeRange(8, 3)]; //NSS
+        result = [[str substringWithRange:NSMakeRange(8,3)]lowercaseString]; //nss
+        
+        
+    }
+    return 0;
+}
+
+=============================================================
+//NSString
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //이제 mmutable 보자 -> NSMutableString 클래스
+       //문자열 중간중간을 바꿀 수 있다.
+        NSString *str = @"This is NSString";
+        
+        //stringWIthString 메서드는 클래스메서드라서 init안해도 생성됨
+        NSMutableString *mstr = [NSMutableString stringWithString:str];
+        //또 NSMutableString안에 인스턴스 메서드들도 있는데 그중에
+        // -(void)appendString:(NSString *) 이있다. 이거는 반환값이 없고 자기자신이 바뀌는 것이다.
+        // NSString은 새로운 스트링을 만들어서 리턴했다 이게 차이첨이다
+        [mstr appendFormat:@" and NSMutableString"]; //This is NSString and NSMutableString
+        
+        //insertString도 있다.
+        // -(void)insertString:(NSString *)
+        //             atIndex:(NSUInteger)  -> 인자를 두개를 받는다.
+        
+        [mstr insertString:@"Mutable" atIndex:8]; //This is Mutable NSString and NSMutableString
+        
+    }
+    return 0;
+}
+
+==========================================================
+//NSArray
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        //NSArray는 값 추가, 수정 불가 한번들어가면(안늘어난다)
+        //NSMutableArray는 값을 넣으면 넣는대로 늘어난다.
+        
+        //arrayWith로 시작하는 메서드는 클래스메서드
+        //initWith로 시작하는 메서드는 인스턴스메서드이다.
+        
+        //기능은 똑같다.
+        //배열 초기화 해보자
+        //nil을 넣는이유는 정적이기때문에 끝임을 알려줘야한다.
+        NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
+                          @"April",@"June",@"July", @"August", @"September",nil];
+        
+        //이 방식은 별로다
+        for(int i = 0; i<[month count]; i++) {
+            NSLog(@"month: %@", month[i]);
+        }
+        
+        // -(ObjectType)objectAtIndex:(NSUInteger)  -> 객체를 반환한다.
+        for(int i=0; i<[month count]; i++) {
+            NSLog(@"month: %@", [month objectAtIndex:i]);
+        }
+        
+        //for in 방식
+        for(NSString *strTemp in month) {
+            NSLog(@"month: %@", strTemp);
+        }
+    }
+    return 0;
+}
+=============================================================
+//NSArray
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
+                                  @"April",@"June",@"July", @"August", @"September",nil];
+                
+        //NSMutableArray는 동적배열을 만든다.
+        //이번에는 클래스메서드를 써보자
+        NSMutableArray *mmonth = [NSMutableArray arrayWithArray:month];
+        [mmonth addObject:@"October"]; //끝에추가 -> 이렇게 값 증가도 가능
+        [mmonth addObject:@"November"];
+        [mmonth addObject:@"December"];
+        
+        for(NSString *strTemp in mmonth) {
+            NSLog(@"mmonth: %@", strTemp);
+        }
+    }
+    return 0;
+}
+
+============================================================
+//NSDictionary
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //초기화
+       //메서드중에 dictionary로 시작하면 클래스메서드
+       //init으로 시작하면 인스턴스메서드이다
+       // value, key, value, key형식으로 넣는다.
+        
+        //정적이다.
+       NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
+        @"이름", @"모름", @"나이",nil];
+       
+        NSLog(@"name: %@",[dic objectForKey:@"이름"]); //name: 최강사
+        NSLog(@"age: %@",[dic objectForKey:@"나이"]);  //age : 모름
+    }
+    return 0;
+}
+
+============================================================
+//NSDictionary
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+       //NSMutableDictionary
+        NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
+                @"이름", @"모름", @"나이",nil];
+        
+        NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        [mdic setObject:@"한국" forKey:@"사는곳"];
+        [mdic setObject:@"약간검정" forKey: @"얼굴색"]; //이렇게 추가할 수 있다.
+        
+        NSLog(@"location: %@", [mdic objectForKey:@"사는곳"]); //사는곳이 키값이다. -> location : 한국
+        
+    }
+    return 0;
+}
+
+===========================================================
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint]
+    }
+}
+
+--------------------
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+===========================================
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+---------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+----------------------
+//
+//  BookManager.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+//배열이 몇개들어올지 모르니까 늘어날수도있어서 mutable로 한다
+@class Book; //컴파일오류 방지하기 위해 선언-> 컴파일이 빨라진다. import하는것보다
+@interface BookManager : NSObject { //BookManager 클래스안에 bookList라는 변수가있다.
+    NSMutableArray *bookList;
+}
+
+-(void)addBook:(Book *)bookObject;  //book객체를 인자로받는다
+-(NSString *)showAllBook;
+
+@end
+
+-----------------------
+//
+//  BookManager.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "BookManager.h"
+#import "Book.h"
+
+@implementation BookManager
+    //초기화코드
+-(id)init {
+    self = [super init];
+    if(self) {
+        bookList = [[NSMutableArray alloc]init];
+    }
+    return self;
+}
+
+-(void)addBook:(Book *)bookObject {
+    [bookList addObject:bookObject];   //받은 bookObject를 추가
+}
+-(NSString *)showAllBook {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    
+    for(Book *bookTemp in bookList) {
+        //누적시키기
+        [strTemp appendString:@"Name: "];
+        [strTemp appendString:bookTemp.name];
+        [strTemp appendString:@"\n"];
+        [strTemp appendString:@"genre: "];
+        [strTemp appendString:bookTemp.genre];
+        [strTemp appendString:@"author: "];
+        [strTemp appendString:bookTemp.author];
+    }
+    return strTemp;
+}
+
+@end
+
+----------------------
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+#import "BookManager.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint];
+        
+        Book *book2 = [[Book alloc]init];
+        book2.name = @"누구를 위하여 종을 울리나";
+        book2.genre = @"전쟁소설";
+        book2.author=@"헤밍웨이";
+        
+        [book2 bookPrint];
+        
+        Book *book3 = [[Book alloc]init];
+        book3.name = @"죄와 벌";
+        book3.genre = @"사실주의";
+        book3.author=@"톨스토이";
+        
+        [book3 bookPrint];
+        
+        BookManager *myBook = [[BookManager alloc]init];
+        [myBook addBook:book1];
+        [myBook addBook:book2];
+        [myBook addBook:book3];
+        
+        //리턴이 문자열이라서 NSLog로 찍어야함
+        NSLog(@"%@", [myBook showAllBook]);
+        
+    }
+}
+======================================================
+//
+//  Book.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface Book : NSObject
+
+//프로퍼티로 getter,setter자동
+//strong은 객체를 첨조하고있다.라는 의미
+@property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
+@property (nonatomic, strong) NSString *genre;
+@property (nonatomic, strong) NSString *author;
+
+-(void)bookPrint;
+
+@end
+
+-------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+----------------------------
+//
+//  Book.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "Book.h"
+
+@implementation Book
+@synthesize name,genre,author;
+
+-(void)bookPrint {
+    NSLog(@"Name: %@", name);
+    NSLog(@"Name: %@", genre);
+    NSLog(@"Name: %@", author);
+}
+
+@end
+
+-------------------------------
+//
+//  BookManager.h
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <Foundation/Foundation.h>
+
+//배열이 몇개들어올지 모르니까 늘어날수도있어서 mutable로 한다
+@class Book; //컴파일오류 방지하기 위해 선언-> 컴파일이 빨라진다. import하는것보다
+@interface BookManager : NSObject { //BookManager 클래스안에 bookList라는 변수가있다.
+    NSMutableArray *bookList;
+}
+
+-(void)addBook:(Book *)bookObject;  //book객체를 인자로받는다
+-(NSString *)showAllBook;
+-(NSUInteger)countBook; //책 갯수
+-(NSString *)findBook:(NSString *)name; //책검색, 없으면 nil반환
+-(NSString *)removeBook:(NSString *)name;
+
+@end
+
+
+---------------------------------
+//
+//  BookManager.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import "BookManager.h"
+#import "Book.h"
+
+@implementation BookManager
+    //초기화코드
+-(id)init {
+    self = [super init];
+    if(self) {
+        bookList = [[NSMutableArray alloc]init];
+    }
+    return self;
+}
+
+-(void)addBook:(Book *)bookObject {
+    [bookList addObject:bookObject];   //받은 bookObject를 추가
+}
+-(NSString *)showAllBook {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    
+    for(Book *bookTemp in bookList) {
+        //누적시키기
+        [strTemp appendString:@"Name: "];
+        [strTemp appendString:bookTemp.name];
+        [strTemp appendString:@"\n"];
+        [strTemp appendString:@"genre: "];
+        [strTemp appendString:bookTemp.genre];
+        [strTemp appendString:@"author: "];
+        [strTemp appendString:bookTemp.author];
+    }
+    return strTemp;
+}
+
+-(NSUInteger)countBook {
+    return [bookList count];
+}
+
+-(NSString *)findBook:(NSString *)name {
+    NSMutableString *strTemp = [[NSMutableString alloc]init];
+    for (Book *bookTemp in bookList) {
+        if([bookTemp.name isEqualToString:name]) { //문자열비교
+            [strTemp appendString:@"Name: "];
+            [strTemp appendString:bookTemp.name];
+            [strTemp appendString:@"\n"];
+            [strTemp appendString:@"genre: "];
+            [strTemp appendString:bookTemp.genre];
+            [strTemp appendString:@"author: "];
+            [strTemp appendString:bookTemp.author];
+            
+            return strTemp;
+        }
+    }
+    return nil;
+}
+-(NSString *)removeBook:(NSString *)name {
+    for(Book *bookTemp in bookList) {
+        if([bookTemp.name isEqualToString:name]) {
+            [bookList removeObject:bookTemp];
+            return name;
+        }
+    }
+    return nil;
+}
+
+@end
+
+------------------------------------------
+//
+//  main.m
+//  BookManager
+//
+//  Created by 조성동 on 2023/04/19.
+//
+
+#import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Book.h"
+#import "BookManager.h"
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        Book *book1 = [[Book alloc]init];
+        book1.name = @"햄릿";
+        book1.genre = @"비극";
+        book1.author=@"세익스피어";
+        
+        [book1 bookPrint];
+        
+        Book *book2 = [[Book alloc]init];
+        book2.name = @"누구를 위하여 종을 울리나";
+        book2.genre = @"전쟁소설";
+        book2.author=@"헤밍웨이";
+        
+        [book2 bookPrint];
+        
+        Book *book3 = [[Book alloc]init];
+        book3.name = @"죄와 벌";
+        book3.genre = @"사실주의";
+        book3.author=@"톨스토이";
+        
+        [book3 bookPrint];
+        
+        BookManager *myBook = [[BookManager alloc]init];
+        [myBook addBook:book1];
+        [myBook addBook:book2];
+        [myBook addBook:book3];
+        
+        //리턴이 문자열이라서 NSLog로 찍어야함
+        NSLog(@"%@", [myBook showAllBook]);
+        NSLog(@"count : %li", [myBook countBook]);  //Unsigned는 li로 출력
+        
+        NSString *strTemp = [myBook findBook:@"죄와 벌"];
+        if(strTemp != nil) {
+            NSLog(@"%@", strTemp);
+        }
+        else {
+            NSLog(@"찾으시는 책이 없네요");
+        }
+        
+        NSString *removeResult = [myBook removeBook:@"죄와 벌"];
+        if(removeResult != nil) {
+            NSLog(@"%@ 책을 지웠습니다.", removeResult);
+        }else {
+            NSLog(@"찾으시는 책이 없네요");
+        }
+        NSLog(@"%@", [myBook showAllBook]);
+    }
+    return 0;
+}
+
+===========================================================
+#)ios에서 푸시알림을 구현하기 위해 지원하는 방법은 두가지가 있다.
+
+
+#) APNs란 각 Device의 앱으로 푸시알림을 보내주게된다.
+
+provider ---  apns --- device
+
+provider가 apns로 메시지를 보내게 되면 이곳에서 인증서를 확인해서 신뢰하는 provider인지 확인한다.
+확인이되면 device로 알림을 보내주게된다.
+
+그래서 provider와 apns 사이의 인증서, apns와 device간의 인증서가 필요하게된다.
+
+즉, 모든 푸시알림을 보내기 위햐ㅐ 중재를 하고있는 센터라고 생각
+
+apns는 bundle Identifier로 프로젝트를 식별한다. 그렇기 때문에 애플개발자에서 등록해줘야한다.
+이제 provider측에서 사용할 증명서를 발급해야한다.
+그렇게 발급해야만 provider에서 apns로 메시지를 보내고 apns에서 각 디바이스로 푸시메시지를 보낼수있기때문이다.
+
+만든 bundle Identifier에 들어가서 push Notifications을 추가
+
+keys에 + 버튼을 눌러 Apple Push Notifications service (APNs) 키를(p8) 추가하면
+이 키는 한번만 다운받을 수 있고, 키파일은 firebase에 사용된다.
+
+순서는 app이 apns에게 device token을 요청한다. 그래야 apns가 푸시알림을 보낼수있다.
+근데 device token은 apns에서 얻을 수 있기때문에 우리 app이 apns에 요청하는 것이다.
+이렇게 apns가 device token을 알려주면 app이 push server(provider)에게 내 device token은 이거야!! 라고 보냄
+여기까지가 연결과정임
+
+이제 provider가 메시지를 보내고 싶을때는 apns에게 "device token은 이거고 보내고싶은 메시지는 이거야" 라고 apns에게 보낸다.
+이때 apns와 provider는 TLS통신을 하기 때문에 pushserver에 인증서가 준비되어있어야한다.(p8)
+
+그 후, apns는 해당 device token으로 데이터를 보낸다.
+background 상태이면 os에서 처리해서 띄우고,
+Foreground 상태이면 AppDelegate에 정의해놓은 방식 대로 APP위에 띄워질 것이다.
+
+device token은 푸시가 전송되는 app주소라고 보면된다.
+
+------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
