@@ -4,7 +4,7 @@
 int main(int argc, char * argv[]) {
     NSString * appDelegateClassName;
     @autoreleasepool {
-        //모든코드는 이안에서 작성
+        //모든코드는 이안에서 작성!
         int wheel = 4; //int float double long - primitive type
         int seats = 2;
         NSLog(@"wheel: %i, seats: %i", wheel, seats);
