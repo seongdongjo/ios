@@ -8,7 +8,7 @@ int main(int argc, char * argv[]) {
         int wheel = 4; //int float double long - primitive type
         int seats = 2;
         NSLog(@"wheel: %i, seats: %i", wheel, seats);
-        
+       
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);
@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         //class는 *넣어줘야한다
         Vehicle *hello = [Vehicle new]  //인스턴스 생성
-        
+       
         //[Receiver Message] Message는 함수이름, 누구의 메시지인지 hello객체의
         [hello setWheels:4];
         [hello setSeats:2];
@@ -122,10 +122,10 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         Vehicle *hello = [Vehicle new]  //인스턴스 생성
         //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
-        
+       
         [hello setWheels:4];
         [hello setSeats:2];
-        
+       
         NSLog(@"wheels: )
     }
     return 0;
@@ -175,12 +175,12 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         Vehicle *hello = [Vehicle new]  //인스턴스 생성
         //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
-        
+       
         //@property (getter=getWheels) int wheels; 이거에 인해서 [hello wheels] 는 못부른다.
         //[hello getWheels] 이렇게 해야한다.
         [hello getwheels]
         [hello wheels:4]
-        
+       
     }
     return 0;
 }
@@ -239,13 +239,13 @@ int main(int argc, char * argv[]) {
 
     @autoreleasepool {
         Vehicle *hello = [Vehicle new]  //인스턴스 생성
-        
+       
         //[hello wheels] 이렇게 접근하는 방식은 옛날방식이다.
         hello.wheels;
         hello.seats;
         hello.wheels = 4;
         hello.seats = 2;
-        
+       
     }
     return 0;
 }
@@ -319,10 +319,10 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         //Vehicle *hello = [Vehicle new];  //인스턴스 생성
         Vehicle *hello = [[Vehicle alloc]init];
-        
+       
         [hello setWheels:4 Seats:2];
         [hello drawCircleXYR:1 :3 :2];
-        
+       
         NSLog(@"wheels: %i, seats: %i", hello.wheels, hello.seats);
     }
     return 0;
@@ -346,16 +346,16 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         //Vehicle *hello = [Vehicle new];  //인스턴스 생성
         Vehicle *hello = [[Vehicle alloc]init];
-        
+       
         [hello setWheels:4 Seats:2];
         [hello drawCircleXYR:1 :3 :2];
-            
+           
         if(hello.wheels == 4) {
             NSLog(@"wheels: 4");
         }else {
             NSLog(@"no");
         }
-        
+       
         switch(hello.seats) {
             case 4:
                 NSLog(@"wheels: 4");
@@ -367,7 +367,7 @@ int main(int argc, char * argv[]) {
                 NSLog(@"NO");
                 break;
         }
-        
+       
         for(int i=0l i<hello.wheels; i++) {
             NSLog(@"wheels: %i", i);
         }
@@ -394,13 +394,13 @@ int main(int argc, char * argv[]) {
         NSString *str = [[NSString alloc]init]; //인스턴스 오브젝트 생성
         str = @"This is NSString"; //문자열이라는 의미이다.(@)
         NSLog(@"str : %@", str);
-        
+       
         //위에 방식은 불편해서 바로 쓰자
         //initwith라고 시작하는 메서드들을 convenience method라고하는데
         //동적할당을 하면서 초기화까지 같이하기 위해서 new 말고 alloc[init을 쓴다.
         NSString *str1 = [[NSString alloc]initWithString:@"This is NSString"];
         NSLog(@"str : %@", str);
-        
+       
         //근데 NSString은 많이 쓰이니까 NSString에서만 아래처럼 가능
         NSString *str2 = @"This is NSString";
         NSLog(@"str2: %@", str);
@@ -419,23 +419,23 @@ int main(int argc, char * argv[]) {
        //NSString 메서드 중에 substringFromIndex가 있는데 문서에서 보면
        // -(NSString *)substringFromIndex:(NSUInteger)anIndex 이렇게되있다.
        // 반환값은 NSString이고 인자는 NSUInteger이다(양수->부호가없는)
-    
-        
-        
+   
+       
+       
         NSString *str = @"This is NSString";
-        
+       
         NSString *result;
         result = [str substringFromIndex:6];  //str의 메서드인 substringFromIndex에 인자를 던짐 -> 문자열반환
         result = [str substringToIndex:3]; //Thi
         result = [[str substringToIndex:11]substringFromIndex:8]; //This is NSS까지 자르고 NSS까지 다시 자른다. -> 결과는 NSS
         result = [[str substringFromIndex:8]substringToIndex:3]; //NSString자르고 NSS까지자르고
-        
+       
         NSLog(@"result : %@", result); //s NSString
-        
+       
         //NSString이 immutable한 클래스인데 -> 중간에 값을 바꿀수없다. 통째로는 가능한데 부분부분 수정이안된다.
         //그래서 위에처럼 리턴이 가능하다.
-        
-        
+       
+       
     }
     return 0;
 }
@@ -457,15 +457,15 @@ int main(int argc, char * argv[]) {
         //    NSUInteger location;
         //    NSUInteger length;
         //}NSRange;
-        
+       
         NSString *str = @"This is NSString";
-        
+       
         NSString *result;
         //NSMakeRange는 구조체를 만드는 메서드이다.
         result = [str substringWithRange:NSMakeRange(8, 3)]; //NSS
         result = [[str substringWithRange:NSMakeRange(8,3)]lowercaseString]; //nss
-        
-        
+       
+       
     }
     return 0;
 }
@@ -481,20 +481,20 @@ int main(int argc, char * argv[]) {
        //이제 mmutable 보자 -> NSMutableString 클래스
        //문자열 중간중간을 바꿀 수 있다.
         NSString *str = @"This is NSString";
-        
+       
         //stringWIthString 메서드는 클래스메서드라서 init안해도 생성됨
         NSMutableString *mstr = [NSMutableString stringWithString:str];
         //또 NSMutableString안에 인스턴스 메서드들도 있는데 그중에
         // -(void)appendString:(NSString *) 이있다. 이거는 반환값이 없고 자기자신이 바뀌는 것이다.
         // NSString은 새로운 스트링을 만들어서 리턴했다 이게 차이첨이다
         [mstr appendFormat:@" and NSMutableString"]; //This is NSString and NSMutableString
-        
+       
         //insertString도 있다.
         // -(void)insertString:(NSString *)
         //             atIndex:(NSUInteger)  -> 인자를 두개를 받는다.
-        
+       
         [mstr insertString:@"Mutable" atIndex:8]; //This is Mutable NSString and NSMutableString
-        
+       
     }
     return 0;
 }
@@ -509,26 +509,26 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         //NSArray는 값 추가, 수정 불가 한번들어가면(안늘어난다)
         //NSMutableArray는 값을 넣으면 넣는대로 늘어난다.
-        
+       
         //arrayWith로 시작하는 메서드는 클래스메서드
         //initWith로 시작하는 메서드는 인스턴스메서드이다.
-        
+       
         //기능은 똑같다.
         //배열 초기화 해보자
         //nil을 넣는이유는 정적이기때문에 끝임을 알려줘야한다.
         NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
                           @"April",@"June",@"July", @"August", @"September",nil];
-        
+       
         //이 방식은 별로다
         for(int i = 0; i<[month count]; i++) {
             NSLog(@"month: %@", month[i]);
         }
-        
+       
         // -(ObjectType)objectAtIndex:(NSUInteger)  -> 객체를 반환한다.
         for(int i=0; i<[month count]; i++) {
             NSLog(@"month: %@", [month objectAtIndex:i]);
         }
-        
+       
         //for in 방식
         for(NSString *strTemp in month) {
             NSLog(@"month: %@", strTemp);
@@ -546,14 +546,14 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         NSArray *month = [[NSArray alloc]initWithObjects:@"January",@"Febrauary",@"march",
                                   @"April",@"June",@"July", @"August", @"September",nil];
-                
+               
         //NSMutableArray는 동적배열을 만든다.
         //이번에는 클래스메서드를 써보자
         NSMutableArray *mmonth = [NSMutableArray arrayWithArray:month];
         [mmonth addObject:@"October"]; //끝에추가 -> 이렇게 값 증가도 가능
         [mmonth addObject:@"November"];
         [mmonth addObject:@"December"];
-        
+       
         for(NSString *strTemp in mmonth) {
             NSLog(@"mmonth: %@", strTemp);
         }
@@ -573,7 +573,7 @@ int main(int argc, char * argv[]) {
        //메서드중에 dictionary로 시작하면 클래스메서드
        //init으로 시작하면 인스턴스메서드이다
        // value, key, value, key형식으로 넣는다.
-        
+       
         //정적이다.
        NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
         @"이름", @"모름", @"나이",nil];
@@ -595,13 +595,13 @@ int main(int argc, char * argv[]) {
        //NSMutableDictionary
         NSDictionary *dic = [NSDictionary alloc]initWithObjectsAndKeys:@"최강사",
                 @"이름", @"모름", @"나이",nil];
-        
+       
         NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:dic];
         [mdic setObject:@"한국" forKey:@"사는곳"];
         [mdic setObject:@"약간검정" forKey: @"얼굴색"]; //이렇게 추가할 수 있다.
-        
+       
         NSLog(@"location: %@", [mdic objectForKey:@"사는곳"]); //사는곳이 키값이다. -> location : 한국
-        
+       
     }
     return 0;
 }
@@ -624,7 +624,7 @@ int main(int argc, char * argv[]) {
         book1.name = @"햄릿";
         book1.genre = @"비극";
         book1.author=@"세익스피어";
-        
+       
         [book1 bookPrint]
     }
 }
@@ -761,7 +761,7 @@ int main(int argc, char * argv[]) {
 }
 -(NSString *)showAllBook {
     NSMutableString *strTemp = [[NSMutableString alloc]init];
-    
+   
     for(Book *bookTemp in bookList) {
         //누적시키기
         [strTemp appendString:@"Name: "];
@@ -796,31 +796,31 @@ int main(int argc, char * argv[]) {
         book1.name = @"햄릿";
         book1.genre = @"비극";
         book1.author=@"세익스피어";
-        
+       
         [book1 bookPrint];
-        
+       
         Book *book2 = [[Book alloc]init];
         book2.name = @"누구를 위하여 종을 울리나";
         book2.genre = @"전쟁소설";
         book2.author=@"헤밍웨이";
-        
+       
         [book2 bookPrint];
-        
+       
         Book *book3 = [[Book alloc]init];
         book3.name = @"죄와 벌";
         book3.genre = @"사실주의";
         book3.author=@"톨스토이";
-        
+       
         [book3 bookPrint];
-        
+       
         BookManager *myBook = [[BookManager alloc]init];
         [myBook addBook:book1];
         [myBook addBook:book2];
         [myBook addBook:book3];
-        
+       
         //리턴이 문자열이라서 NSLog로 찍어야함
         NSLog(@"%@", [myBook showAllBook]);
-        
+       
     }
 }
 ======================================================
@@ -938,7 +938,7 @@ int main(int argc, char * argv[]) {
 }
 -(NSString *)showAllBook {
     NSMutableString *strTemp = [[NSMutableString alloc]init];
-    
+   
     for(Book *bookTemp in bookList) {
         //누적시키기
         [strTemp appendString:@"Name: "];
@@ -967,7 +967,7 @@ int main(int argc, char * argv[]) {
             [strTemp appendString:bookTemp.genre];
             [strTemp appendString:@"author: "];
             [strTemp appendString:bookTemp.author];
-            
+           
             return strTemp;
         }
     }
@@ -1004,32 +1004,32 @@ int main(int argc, char * argv[]) {
         book1.name = @"햄릿";
         book1.genre = @"비극";
         book1.author=@"세익스피어";
-        
+       
         [book1 bookPrint];
-        
+       
         Book *book2 = [[Book alloc]init];
         book2.name = @"누구를 위하여 종을 울리나";
         book2.genre = @"전쟁소설";
         book2.author=@"헤밍웨이";
-        
+       
         [book2 bookPrint];
-        
+       
         Book *book3 = [[Book alloc]init];
         book3.name = @"죄와 벌";
         book3.genre = @"사실주의";
         book3.author=@"톨스토이";
-        
+       
         [book3 bookPrint];
-        
+       
         BookManager *myBook = [[BookManager alloc]init];
         [myBook addBook:book1];
         [myBook addBook:book2];
         [myBook addBook:book3];
-        
+       
         //리턴이 문자열이라서 NSLog로 찍어야함
         NSLog(@"%@", [myBook showAllBook]);
         NSLog(@"count : %li", [myBook countBook]);  //Unsigned는 li로 출력
-        
+       
         NSString *strTemp = [myBook findBook:@"죄와 벌"];
         if(strTemp != nil) {
             NSLog(@"%@", strTemp);
@@ -1037,7 +1037,7 @@ int main(int argc, char * argv[]) {
         else {
             NSLog(@"찾으시는 책이 없네요");
         }
-        
+       
         NSString *removeResult = [myBook removeBook:@"죄와 벌"];
         if(removeResult != nil) {
             NSLog(@"%@ 책을 지웠습니다.", removeResult);
@@ -1050,6 +1050,23 @@ int main(int argc, char * argv[]) {
 }
 
 ===========================================================
+#) Swift같은 경우에는 타입추론이라고 해서~~~
+var str:String = "안녕하세요"
+var str = "안녕하세요" 가능하다.
+
+#) 하지만 Object-c에서는 타입을 명시해주어야 한다.
+NSString *str = @"안녕하세요";  //변수명앞에는 *을 붙여줘야한다.(;표시도 필수이다)
+
+#) 대괄호 설명
+UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(23,28,258,20)];
+
+1. 왼쪽에 titleLabel은 포인터 변수라고 생각
+2. 우측에 alloc는 new 같은 개념  
+3. titleLabel.initWithFrame() 과 같고 CGRectMake()를 해서 나온사각형을 initWithFrame에 보내고
+   그걸 포인터변수에 넣는다.
+
+즉, [self addSubView:mMyVariable];  -> self.addSubView(mMyVariable); 과 같은의미이다.
+==============================================================
 #)ios에서 푸시알림을 구현하기 위해 지원하는 방법은 두가지가 있다.
 
 
@@ -1088,204 +1105,154 @@ Foreground 상태이면 AppDelegate에 정의해놓은 방식 대로 APP위에 �
 device token은 푸시가 전송되는 app주소라고 보면된다.
 
 ------------------------------------
-#) Swift같은 경우에는 타입추론이라고 해서 
-var str:String = "안녕하세요"
-var str = "안녕하세요" 가능하다.
-
-#) 하지만 Object-c에서는 타입을 명시해주어야 한다.
-NSString *str = @"안녕하세요";  //변수명앞에는 *을 붙여줘야한다.(;표시도 필수이다)
-
-#) 대괄호 설명
-UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(23,28,258,20)];
-
-1. 왼쪽에 titleLabel은 포인터 변수라고 생각
-2. 우측에 alloc는 new 같은 개념
-3. titleLabel.initWithFrame() 과 같고 CGRectMake()를 해서 나온사각형을 initWithFrame에 보내고
-   그걸 포인터변수에 넣는다.
-
-즉, [self addSubView:mMyVariable];  -> self.addSubView(mMyVariable); 과 같은의미이다.
-테스트
-======================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#)앱의 생명주기(app's Life Cycle)
+앱의 실행/종료 및 app이 Foreground, background 상태에 있을 때, 시스템이 발생시키는 이벤트에 의해 app의 상태가 전환되는 과정
+
+#) ios에서 앱을 실행하면 무슨 일이 일어날까??
+IOS 앱은 Objective-C 기반으로 돌아가기 때문에 앱은 main 함수에서 시작하지만, ios핵심 라이브러리인 UIKit framework가 main함수를 관리하기 때문에
+앱 개발자들이 직접 main함수에 코드를 작성하지 않는다.
+UIKit은 main함수를 다루는 과정에서 UIApplicationMain 함수를 실행한다.
+이 함수를 통해 UIApplication객체가 생성되는데 이 객체를 통해 앱 개발자들은 앱의 실행에 부분적으로 관여할 수 있게 되는 것이다.
+
+#)앱 실행되면 발생되는 일 정리
+1. UIApplication 객체가 생성
+2. @UIApplicationMain 또는 @Main 어노테이션이 있는 클래스를 찾아 AppDelgate 객체 생성
+3. Main Event Loop를 실행(touch,text input 등 사용자의 액션을 받는 루프)
+
+자, 그러면 Main Run Loop라는 것은 유저가 일으키는 이벤트들을 처리하는 프로세스이다.
+순서는
+1. 유저가 이벤트를 일으킨다(버튼터치, 화면 스와이프 등)
+2. 시스템을 통해 이벤트가 생성된다.
+3. UIKit 프레임워크를 통해 생성된 port로 해당 이벤트가 앱으로 전달된다.
+4. 이벤트는 앱 내부적으로 Queue의 헝태로 정리되고 Event Queue에 쌓인다.
+5. Event Queue에 있는 이벤트들이 Main Run Loop에 하나씩 매핑된다.
+6. UIApplication객체는 이때 가장 먼저 이벤트를 객체로 어떤 것이 실행되어야 하는지 결정한다.
+
+자!! 여기까지가 사용자가 앱에 이벤트를 전달한 후 앱의 실행까지 어떤 과정을 통해 이뤄지는지 알아보았다.
+앞에는 과정이라면 이제는 앱실행전, 실행 후 상태를 알아보자
+
+#)앱 상태
+앱의 상태는 총 5가지로(NotRunning, Foreground(Inactive, active), Background, Suspend 로 구분이 된다.
+
+순서)
+1. Not Running: 앱이 실행되지 않았거나, 완전히 종료되어 동작하지 않는 상태
+2. Inactive(Foreground) : 앱이 실행되면서 Foreground에 진입하지만, 어떠한 이벤트도 받지 않는 상태
+3. active(Foreground) : 앱이 실행 중이며, foreground에 있고, 이벤트를 받고있는 상태이다
+4. Background : 다른 앱으로 전환되었거나 홈버튼을 눌러 밖으로 나갔을 때의 상태입니다,
+                일정시간이 지나 앱을 Suspended 상태로 바뀌게 된다.(Suspended와 차이점은 실행되는 코드가 있냐없냐이다)
+5. Suspended : 백그라운드에서 특별한 작업이 없을 경우 Suspended 상태가 된다.
+이상태에서 앱은 메모리 상에 올라가있지만 아무 일도 하지 않기 때문에 배터리를 사용하지 않는다.
+또한 OS에 의해 메모리 부족현상이 발생하면 이 상태의 앱은 메모리에서 없어질 수 있으며, 이는 따로 알림을 하진 않는다.
+
+---------------------------
+
+#)AppDelegate 객체의 메소드 호출
+앱의 생명주기(foreground,background에서 SceneDelegate의 메소드 씀)에 따라서
+AppDelegate객체의 SceneDelegate에서 특정 메소드를 호출하게 된다.
+
+1-1. Not Running일때(실행x, 준비끝나기 직전)
+application(_:willFinishLaunchingWithOptions:)
+위 메소드 안에는 앱을 실행할 때 최초로 실행할 코드를 작성한다.
+필요한 주요 객체들을 생성하고 앱 실행 준비가 끝나기 직전에 호출된다.
+
+1-2 Not Running일때(실행x, 준비끝난 후)
+applicationDidFinishLaunching(_:)
+앱 실행을 위한 모든 준비가 끝난 후 화면이 사용자에게 보여지기 직전에 호출된다.
+주로 초기화 코드를 이곳에다 작성한다.
+
+1-3 Not Running일때(실행x, 앱이 종료되기 직전에 호출)
+applicationWillTerminate(_:)
+
+2. In-Active 상태일 때(앱이 forground 이지만, 이벤트는 받지 않는 상태)
+sceneWillEnterForeground(_:)
+앱이 background나 not running에서 foreground로 들어가기 직전에 호출된다.
+비활성화 상태를 거쳐 활성화 상태가 된다.
+
+sceneWillResignActive(_:)
+AppSwitcher모드(홈 바 쓸어 올렸을 경우)
+
+3. Active 상태일 때
+sceneDidBecomeActive(_:)
+앱이 비활성화상태에서 활성상태로 진입하고 난 직후 호출된다.
+
+4. Background 상태
+sceneDidEnterBackground(_:)
+앱이 background 상태로 들어갔을 때 호출된다.
+suspended 상태가 되기 전 중요한 데이터를 저장하는 등 종료하기 전 필요한 작업을 한다.
+
+5. suspended 상태
+따로 호출되는 메소드는 없으며 background 상태에서 특별한 작업이 없을 때 이상태가 된다.
+
+-----------------------------------
+#) ~ios12버전에서는 SceneDelegate 없음.
+   13버전부터는 SceneDelegate 있음.
+   
+ 
+#) 그러면 ~ios12까지(Scene을 지원하지 않는 경우) 동작을 보자
+Scene을 지원하지 않는 경우, 모든 생명주기 이벤트들은 appDelegate에 전달된다.
+각각의 상태에 접근하기 위해 사용되는 파일이 Appdelegate.swift 이다.
+ios앱 프로젝트를 생성하면 Appdelegate.swift 파일이 자동으로 생성된다.
+
+Appdelegate는 이름 그대로 앱과 시스템의 연결을 위해 필요한 delegate 메소드를 담고 있다.
+
+//Appdelegate.swift
+import UIKit
+
+@UIApplicationMain
+class Appdelegate: UIResponder, UIApplicationDelegate {
+	
+	var window: UIWindow?
+	
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+		return true
+	}
+	
+	//앱이 active에서 inactive로 이동될 때 실행
+	func applicationWillResignActive(_ application: UIApplication) {
+	}
+	
+	//앱이 background 상태일 때 실행
+	func applicationDidEnterBackground(_ application: UIApplication) {
+	}
+	
+	//앱이 background에서 foreground로 이동될 때 실행(아직 foreground에서 실행x)
+	func applicationWillEnterForeground(_ application: UIApplication) {
+	}
+	
+	//앱이 active상태가 되어 실행 중 일때
+	func applicationDidBecomeActive(_ application: UIApplication) {
+	}
+	
+	//앱이 종료될 때 실행
+	func applicationWillTerminate(_ application: UIApplication) {
+	}
+}
+
+위의 코드를 보면 Appdelegate 객체는 UIResponder와 UIApplicationDelegate을 상속 및 참조하고있다.
+먼저, UIResponder는 앱에서 발생하는 이벤트들을 담고 있는 추상형 인터페이스 객체로 View와 사용자의 이벤트간의 연결을 관리
+
+그다음, UIApplicationDelegate는 UIApplication객체의 작업에 개발자가 접근할 수 있도록 하는 메서드들을 담고 있다.
+예를들어, didFinishLaunchingWithOptions, applicationWillResignActive 등과 같은 메소드를 통해 앱의 상태가 변할 때 수행할 작업들을 설정할 수 있다.
+
+appDelegate 객체는 app의 모든 window를 관맇가ㅣ 때문에,
+앱의 상태 변화는 앱의 모든 UI에 영향을 미친다.
+
+
+#) ios13버전부터의 동작(Scene을 지원하는 경우)
+SceneDelegate는 IOS13부터 추가된 클래스이다.
+SceneDelegate는 UI 생명주기를 관리하는 클래스이다.
+IOS12버전 까지는 하나의 앱이 하나의 윈도우만 가지기때문에 AppDelegate클래스가 UI 생명주기도 관리했어야했다.
+
+하지만, IOS13부터 하나의 앱에 여러 개의 윈도우를 동시에 사용할 수 있게 되었기 때문에 UI 생명주기를 전담 관리해줄 클래스가 필요했는데
+그게 SceneDelegate 클래스이다.
+
+즉, Scene을 지원하는 경우, Scene별로 별도의 생명주기를 가지게 된다.
+scene하나는 디바이스에서 돌아가는 앱의 UI인스턴스 하나를 나타낸다.
+하나의 앱은 여러개의 Scene을 가질 수 있으며, 이를 개별적으로 띄우거나 숨길 수 있다.
+
+사용자나 시스템이 새로운 scene을 만들어달라고 요청하면,
+UIKit은 이를 만들어 unattached 상태로 만든다.
+사용자가 요청한 scene은 곧장 foreground inactive 상태를 거쳐 active상태가 되고,
+시스템이 요청한 scene은 보통 background 상태가 되어 이벤트 처리한 뒤에 foreground로 올라온다.
+
+=========================================================================================
