@@ -892,14 +892,14 @@ let hello2 =  { (name: String) -> String in
     return "Hello, \(name)"
 }
 
-hello2(name: "Gunter") //파라미터 전달하면 에러가된다. 즉, 클로저는 전달인자레이블을 생략하고 던져야한다
+hello2(name: "Gunter") //파라미터 전달하면 에러가된다. 즉, 클로저는 전달인자레이블을 생략하고 던져야한다!!!!
 hello2("Gunter")  //Hello, Gunter
 
 --------------
 func doSomething(closure: () -> ()) { //파라미터이름은 closure
     closure()
 }
-
+//함수호출(doSomething)
 doSomething(closure: { () -> () in  //doSomething함수호출시 위에 선언된 closure() 실행되서 print실행
     print("hello")  
 })
