@@ -66,6 +66,142 @@ func add(_ a: Int, _ b: Int) -> Int {  //파라미터 a,b는 스택에 할당
 
 ===========================================================
 #)ARC가 메모리 영역 중 힙 영역을 관리한다.
+//sodeul이라는 인스턴스를 생성하고 값을 초기화 했다.
+class Human {
+    var name: String?
+    var age: Int?
+    
+    init(name: String?, age: Int?) {
+        self.name = name
+        self.age = age
+    }
+}
+let sodeul = Human(name: "Sodeul", age: 26)
+
+//그걸 저장될때는
+스택영역에 sodeul(0x11111111) ---> 힙영역(Human Instance 0x11111111, name: "Sodeul", age: 26) 이렇게된다.
+
+let clone = sodeul 이라고 해도 복사는 안된다.
+
+스택에
+Sodeul  --->     
+                  human Instance
+clone   --->
+
+
+//그럼 스택에 있는 sodeul, clone이 함수 종료 시점에 사라지고 나면
+//힙에 남은 쓰이지도 않는 인스턴스는 누가 메모리 해제 해줌??
+-> ARC가 해제해준다. 즉, 힙에 할당된 인스턴스의 메모리를 알아서 관리해준다.
+
+
+#) 힙 영역의 메모리를 관리하는 법은 GC와 RC가 있다.
+자바는 GC(Garbage Collection), ARC는 RC에 포함된다.
+
+둘의 차이점은 참조계산시점에 있다.
+GC는 Runtime인데 어플실행동안 주기적으로 참조를 추적하여 사용하지 않는 인스턴스를 해제
+RC는 Compile 시점에 언제 참조되고 해제되는지 결정되어 런타임때 그대로 실행(순환참조 일경우 메모리에서 해제안되는 현상)
+
+
+#) MRC(MRR) VS ARC
+둘다 RC지만 앞에 붙은 MRC(Manual) VS ARC(Automatic) 차이다.
+즉, MRC는 힙에 메모리를 직접 할당/해제를 해주는 것이다.
+2011년 이전엔 Object-c가 이방법을 사용. 2011이후에는 Object-c도 ARC사용
+
+그래서, 오래된 오브젝트씨 언어보면 [test retain] [test release]를 볼수있는데 이것들이 MRC를 사용할 때 쓰는 메소드 들이다.
+
+==========================================================
+3. ARC의 메모리 관리방법
+Reference Count 를 이용한다.
+메모리의 참조횟수(RC)를 계산하여, 참조횟수가 0이되면 더이상 사용하지 않는 메모리라 생각하여 해제한다.
+
+만약 참조횟수가 10이라면 해당 인스턴스가 10군데에서 참조되고 있단 뜻.
+따라서 모든 인스턴스는 자신의 RC값을 가지고 있다.(인스턴스가 생성될 때 힙에 같이 저장된다고 한다)
+
+3-1. 참조횟수 Count up(+)
+참조횟수가 +1이 되는 순간은 인스턴스의 주소값을 변수에 할당할 때이다.
+
+즉, 1. 인스턴스를 새로 생성할 때
+let sodeul = Human(name: "Sodeul", age: 26)
+또  2. 기존 인스턴스를 다른 변수에 대입할 때
+let clone = sodeul
+
+3-2. 참조횟수 Count down(-)
+1. 인스턴스를 가리키던 변수가 메모리에서 해제되었을 때
+func makeClone(_ origin: Human) {  
+    let clone = origin                        // 2. Instance RC: 2
+}
+
+let sodeul = Human(name: "Sodeul", age: 26)   // 1. Instance RC: 1
+makeClone(sodeul)                             // 3. Instance RC: 1(함수가 종료되어 지역변수 clone이 스택에서 해제되는 순간)
+
+2. nil이 지정되었을 때
+일단, nil이 지정된단 소리는 당연히 옵셔널 타입이라는 소리이다.
+
+var sodeul: Human? = .init(name: "Sodeul", age: 26)
+var clone = sodeul
+clone = nil
+sodeul = nil
+
+3. 변수에 다른 값을 대입한 경우
+var sodeul: Human? = .init(name: "Sodeul", age: 26)
+var clone: Human? = .init(name: "Sodeul2", age 26)
+sodeul = clone
+
+sodeul의 RC는 -1, clone의 RC는 +1
+즉, sodeul이 가리키던 인스턴스는 RC가 0이되었으므로 자동으로 메모리에서 해제
+
+
+4. 프로퍼티의 경우, 속해있는 클래스 인스턴스가 메모리에서 해제될 때
+class Contacts {
+    var email: String?
+    var address: String?
+    
+    init(email: String?, address: String?) {
+        self.email = email
+        self.address = address
+    }
+    deinit{print("Contacts Deinit)"}
+}
+class Human {
+    var name: String?
+    var age: Int?
+    var contacts: Contacts? = .init(email: "o_o@naver", address: "Suwon")
+    
+    init(name: String?, age: Int?) {
+        self.name = name
+        self.age = age
+    }
+    deinit { print("Human Deinit")}
+}
+let sodeul: Human? = .init(name: "Sodeul", age: 26)
+sodeul = nil
+
+//위의 코드가 메모리에서는
+스택                              힙영역
+sodeul(0x11111111)  --RC+1->  Human Instance 0x11111111(RC=1)
+                                name: "Sodeul"
+                                age: 26
+                               -contacts: 0x22222222
+                        (RC+1) | 
+                               |->Contacts Instance 0x22222222 RC=1
+                                  email: "o_o@naver"  
+                                  address: suwon
+                                
+즉, contacts는 sodeul이 가리키던 인스턴스에 소속된 프로퍼티이기 때문에,
+sodeul이 가리키던 인스턴스가 메모리에서 해제될 경우, contacts의 RC가 하나 감소한다.
+순서를 보면
+1. sodeul에 nil을 할당한 순간, sodeul이 가리키고 있던 HumanInstance의 RC가 1 감소
+2. Human Instance의 RC가 0이되었으니 메모리에서 해제
+이떄, HumanInstance가 품고있던 contacts란 프로퍼티도 같이 메모리에서 해제되니, Contacts Instance의 RC가 1 감소 -> 해제
+
+***주의할점
+soduel이 가리키던 Human인스턴스가 메모리에서 해제된다 해서
+프로퍼티인 contacts가 가리키던 Contacts 인스턴스의 메모리도 같이 해제 되는 것이 아니다!!!
+Contacts 인스턴스의 RC가 1감소할뿐이다.
+
+==========================================================
+
+
 
 
 ==========================================================
