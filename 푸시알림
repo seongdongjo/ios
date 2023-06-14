@@ -200,8 +200,157 @@ soduel이 가리키던 Human인스턴스가 메모리에서 해제된다 해서
 Contacts 인스턴스의 RC가 1감소할뿐이다.
 
 ==========================================================
+1. 강한참조(strong)
+위에서 설명한게 강한참조다. 즉, 인스턴스의 주소값이 변수에 할당될 때, RC가 증가하면 강한참조 인것이다.
+지금껏 자연스럽게 인스턴스를 생성하고 사용하던 것이 다 strong이자 강한 참조였던것이다.
+default값이 strong 이다
+
+강한참조의 문제점이 순환참조이다.
+
+2. 순환참조
+class Man {
+    var name: String
+    var girlfriend: Woman?
+    
+    init(name: String) {
+        self.name = name
+    }
+    deinit{print("Man Deinit!")}
+}
+
+class Woman {
+    var name: String
+    var boyfriend: Man?
+    
+    init(name: String) {
+        self.name = name
+    }
+    deinit{print("Woman Deinit!")}
+}
+
+var chelosu: Man? = .init(name: "철수")
+var yeonghee: Woman? = .init(name: "영희")
+
+//위에 처럼 생성되면 메모리에서는
+스택                                         힙영역
+cheolsu(0x111..)   ---RC+1(strong)-->   Man Instance(0x111..) RC=1 
+                                          name: "철수
+                                          girlfriend: nil     
+yeonghee(0x222..)  ---RC+1(strong)-->   Woman Instance(0x222..) RC=1
+                                          name:"영희"
+                                          boyfriend: nil
+
+//근데, 여기서 서로 사귄다면
+chelosu?.girlfriend = yeonghee
+yeonghee?.boyfriend = chelosu
+
+힙영역
+ManInstance(0x111..)RC=2
+name:"철수"
+girlfriend: 0x222... (아래 참조)
+
+WomanInstance(0x222..) RC=2
+name: "영희"
+boyfriend: 0x111...(위에참조)
+
+//이렇게 두개의 객체가 서로가 서로를 참조하고 있는 형태를 순환참조라고 한다.
 
 
+2-1. 순환참조의 문제점
+chelosu = nil
+yeonghee = nil
+
+이렇게 되면 스택에서 철수, 영희를 가리키던 변수에 nil을 할당했으니, Reference Count가 0이 되어
+힙에서 각각 해제되어야 하는데... Man, Woman 클래스에서 deinit 메서드가 호출되지 않는걸 볼수가있다.
+
+즉, 힙에서 사라지지않고 계속 메모리를 먹고있단 소리 -> 순환참조 때문에 RC=1이다.
+
+스택                             힙
+cheolsu(nil)  ---RC-1---->   Man Instance(0x111...) RC=1
+                              name: "철수"
+                              girlfriend: 0x222...
+yeonghee(nil) ---RC-1---->   Woman Instance(0x222...) RC=1
+                              name: "영희"
+                              boyfriend: 0x111...
+
+
+이렇게, strong으로 선언된 변수들이 순환참조 됐을 시 큰 문제점은
+서로가 서로를 참조하고 있어서 RC가 0이 되지 못한다는 것이다.
+심지어!!!!! 해당 인스턴스를 가리키던 변수(철수,영희)도 nil이 되어서 인스턴스에 접근 할 수 있는 방법도 없어서 메모리 해제도 못하는 현상
+
+따라서, 어플이 죽기 전까진 memory leak이 계속 발생하는 것이다.
+이렇게 strong을 사용해서 순환참조에 문제가 생긴 경우를 강한순환참조라고 한다.
+
+3. weak, unowned
+해결은 weak와 unowned를 사용하면 된다.
+
+3-1 weak(약한참조)
+인스턴스를 참조할 시, RC를 증가시키지 않는다.
+참조하던 인스턴스가 메모리에서 해제된 경우, 자동으로 nil이 할당되어 메모리가 해제된다.
+
+그리고, 프로퍼티를 선언한 이후, 나중에 nil이 할당된다는 관점으로 보아
+weak은 무조건 옵셔널 타입의 변수 여야한다.
+
+둘중 한쪽을 weak으로 선언해주는것이다.
+지금은 철수와 영희의 수명이 동일하기때문에 아무거나 weak으로 해도됨(아래처럼)
+// weak 선언은 순환참조를 일으키는 프로퍼티 앞에 weak을 붙여주면 된다.
+class Man {
+    var name: String
+    weak var girlfriend: Woman?
+    
+    init(name: String) {
+        self.name = name
+    }
+    deinit{print("Man Deinit!")}
+}
+
+class Woman {
+    var name: String
+    var boyfriend: Man?
+    
+    init(name: String) {
+        self.name = name
+    }
+    deinit{print("Woman Deinit!")}
+}
+
+var chelosu: Man? = .init(name:"철수")
+var yeonghee: Woman? = .init(name:"영희")
+chelosu?.girlfriend = yeonghee
+yeonghee?.boyfriend = chelosu
+
+//메모리 구조
+스택                                     힙
+chelosu(0x111...) --RC+1-->   |--> Man Instance (0x111..) RC=2
+                              |    name: "철수"
+                              |    --girlfriend: 0x222... (WomanInstance의 RC+1 하지않는다. weak이라서)
+                    (strong)  |    |
+                              |    |(weak)
+                              |    |   
+yeonghee(0x222...) --RC+1-->  |    |-->Woman Instance(0x222...) RC=1
+                              |        name: "영희"
+                              -------- boyfriend: 0x111...(ManInstance에 RC+1 Strong)
+
+
+//이렇게 girlfriend의 프로퍼티가 weak이기 때문에 Woman Instance의 주소값을 할당받지만 Woman인스턴스의 RC값은 건들지 않는다.
+
+#) 그럼 nil을 했을 떄 원리는 어떻게 될까??
+chelosu = nil
+yeonghee = nil
+
+1. 철수, 영희 변수는 nil이 할당된 순간 각각의 인스턴스에 대한 RC를 1씩 감소한다.
+
+스택                             힙
+chelosu(nil) --RC-1-->      ManInstance(0x111...) RC=1
+                             name: "철수"
+                             girlfriend: 0x222...
+
+yeonghee(nil) --RC-1-->      WomanInstance(0x222....) RC=0
+                              name: "영희"
+                              boyfriend: 0x111...
+                              
+2. RC가 0이 된 WomanInstance가 메모리에서 해제된다.
+이때, WomanInstance에서 프로퍼티까지 없어지니까 ManInstance의 RC도 -1이 되서 0이된다.
 
 
 ==========================================================
