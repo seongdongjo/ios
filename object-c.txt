@@ -7,7 +7,7 @@ int main(int argc, char * argv[]) {
         //모든코드는 이안에서 작성!
         int wheel = 4; //int float double long - primitive type
         int seats = 2;
-        NSLog(@"wheel: %i, seats: %i", wheel, seats);
+        NSLog(@"wheel: %i, seats: %i", wheel, seats); //화면에 찍을때 int는 %i
        
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
@@ -36,20 +36,23 @@ ex) @interface SimpleClass : NSObject  (상속을 받는다, NSO라는)
 @end
 --------------------------------
 class, instance  == object
-
+#)선언부
+//변수선언부
 @interface Vehicle : NSObject {
     //member variable 영역
     int wheels;
     int seats;
 }
 
+//함수선언부
 //member method
 -(void)setWheels:(int)w;   //w라는 인자를 받겠다
 -(void)setSeats:(int)s;
 -(void)print;   //받을게 없어서 이렇게 정의
 
+#)구현부
 @implementation Vehicle
--(void)setWheels:(int)w {
+-(void)setWheels:(int)w { //인자를 던져준다.
     wheels = w;
 }
 
@@ -58,7 +61,7 @@ class, instance  == object
 }
 
 -(void)print {
-    NSLog(@"wheels: %i, seats: %i",wheels,seats);
+    NSLog(@"wheels: %i, seats: %i",wheels,seats); //가져올때는 member variable영역에서 그대로 가져오면 된다.
 }
 
 int main(int argc, char * argv[]) {
@@ -88,34 +91,17 @@ int main(int argc, char * argv[]) {
 }
 
 //member method
-//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
-//-(void)setSeats:(int)s;
-//-(int)wheels; //getter 메서드정의만
-//-(int)seats;
-@property int wheels; //getter, setter 해준다
+@property int wheels; //getter, setter 해준다(member method에서 @property 선언해주면 된다)
 @property int seats;
 -(void)print;   //받을게 없어서 이렇게 정의
-
+#)구현부
 @implementation Vehicle
 @synthesize wheels;  //property해주면 이거 같이해주면 됨.
 @synthesize seats;
-//-(void)setWheels:(int)w {
-//    wheels = w;
-//}
-//
-//-(void)setSeats:(int)s {
-//    seats = s;
-//}
 
 -(void)print{
     NSLog(@"wheels: %i, seats: %i",wheels,seats);
 }
-//-(int)wheels {
-//    return wheels;
-//}
-//-(int)seats {
-//    return seats;
-//}
 
 int main(int argc, char * argv[]) {
 
@@ -126,7 +112,7 @@ int main(int argc, char * argv[]) {
         [hello setWheels:4];
         [hello setSeats:2];
        
-        NSLog(@"wheels: )
+        //NSLog(@"wheels: )
     }
     return 0;
 }
@@ -136,12 +122,6 @@ int main(int argc, char * argv[]) {
     //int wheels;
     //int seats;
 }
-
-//member method
-//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
-//-(void)setSeats:(int)s;
-//-(int)wheels; //getter 메서드정의만
-//-(int)seats;
 
 //getter, setter 이름 재정의해보기 setWheels를 wheels로(setter=wheels:), wheels를 getWheels로(getter=getWheels)
 //setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
