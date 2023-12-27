@@ -132,23 +132,10 @@ int main(int argc, char * argv[]) {
 @implementation Vehicle
 @synthesize wheels;  //property해주면 이거 같이해주면 됨.
 @synthesize seats;
-//-(void)setWheels:(int)w {
-//    wheels = w;
-//}
-//
-//-(void)setSeats:(int)s {
-//    seats = s;
-//}
 
 -(void)print{
     NSLog(@"wheels: %i, seats: %i",wheels,seats);
 }
-//-(int)wheels {
-//    return wheels;
-//}
-//-(int)seats {
-//    return seats;
-//}
 
 int main(int argc, char * argv[]) {
 
@@ -157,8 +144,7 @@ int main(int argc, char * argv[]) {
         //Vehicle *hello = [[Vehicle alloc]init]  //인스턴스 생성
        
         //@property (getter=getWheels) int wheels; 이거에 인해서 [hello wheels] 는 못부른다.
-        //[hello getWheels] 이렇게 해야한다.
-        [hello getwheels]
+        [hello getwheels]  //@property (getter=getWheels,setter=wheels:) int wheels; 이렇게 했기때문에 가능하다.
         [hello wheels:4]
        
     }
@@ -182,14 +168,6 @@ int main(int argc, char * argv[]) {
     //int seats;
 }
 
-//member method
-//-(void)setWheels:(int)w;   //w라는 인자를 받겠다
-//-(void)setSeats:(int)s;
-//-(int)wheels; //getter 메서드정의만
-//-(int)seats;
-
-//getter, setter 이름 재정의해보기 setWheels를 wheels로, wheels를 getWheels로
-//setter에 콜론(:) 을 붙이는 이유는 세터는 무조건 하나의 인자는 받아야하기때문에
 @property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
 @property int seats;
 -(void)print;   //받을게 없어서 이렇게 정의
@@ -204,7 +182,6 @@ int main(int argc, char * argv[]) {
 //-(void)setSeats:(int)s {
 //    seats = s;
 //}
-
 -(void)print {
     NSLog(@"wheels: %i, seats: %i",wheels,seats);
 }
@@ -244,7 +221,7 @@ new - cocoa class - 클래스이름은 Vehicle로 만들면 m, h 파일이 생�
 #import <Foundation/Foundation.h>
 
 @interface Vehicle : NSObject {
-    //member variable 영역
+    //member variable 영역, @property하면 member variable영역에서 변수 선언안해도된다.
 }
 
 @property int wheels; //getter, setter 해준다, member variable영역에서 변수 생략가능하다.
@@ -371,7 +348,7 @@ foundation framework -> 안에 최상위 클래스 NSObject 그 밑에 많다.
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         //객체를 만들어야 쓸 수 있다.
-        NSString *str = [[NSString alloc]init]; //인스턴스 오브젝트 생성
+        NSString *str = [[NSString alloc]init]; //인스턴스 오브젝트 생성 - 초기화까지 진행해서 str이라는 변수에 할당한다.
         str = @"This is NSString"; //문자열이라는 의미이다.(@)
         NSLog(@"str : %@", str);
        
@@ -424,8 +401,7 @@ int main(int argc, char * argv[]) {
 //NSString
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
-
+#import "AppDelegate.h
 int main(int argc, char * argv[]) {
     @autoreleasepool {
        //NSString 메서드 중에 substringWithRange가 있는데 문서에서 보면
@@ -433,11 +409,10 @@ int main(int argc, char * argv[]) {
        //NSRange를 보면 구조체이다.
        
         // location부터 length까지 잘라라
-        //typedef struct _NSRange {
+        //typedef struct _NSRange { 구조체이다.
         //    NSUInteger location;
         //    NSUInteger length;
         //}NSRange;
-       
         NSString *str = @"This is NSString";
        
         NSString *result;
@@ -459,10 +434,10 @@ int main(int argc, char * argv[]) {
 int main(int argc, char * argv[]) {
     @autoreleasepool {
        //이제 mmutable 보자 -> NSMutableString 클래스
-       //문자열 중간중간을 바꿀 수 있다.
+       //문자열 중간중간을 바꿀 수 있다. - mutable이기 때문에 가능하다.
         NSString *str = @"This is NSString";
        
-        //stringWIthString 메서드는 클래스메서드라서 init안해도 생성됨
+        //stringWIthString 메서드는 클래스메서드라서 init안해도 생성됨 
         NSMutableString *mstr = [NSMutableString stringWithString:str];
         //또 NSMutableString안에 인스턴스 메서드들도 있는데 그중에
         // -(void)appendString:(NSString *) 이있다. 이거는 반환값이 없고 자기자신이 바뀌는 것이다.
@@ -528,7 +503,7 @@ int main(int argc, char * argv[]) {
                                   @"April",@"June",@"July", @"August", @"September",nil];
                
         //NSMutableArray는 동적배열을 만든다.
-        //이번에는 클래스메서드를 써보자
+        //이번에는 클래스메서드를 써보자 - alloc, init이 안쓰인다. 클래스 메서드이기 때문에
         NSMutableArray *mmonth = [NSMutableArray arrayWithArray:month];
         [mmonth addObject:@"October"]; //끝에추가 -> 이렇게 값 증가도 가능
         [mmonth addObject:@"November"];
@@ -600,7 +575,7 @@ int main(int argc, char * argv[]) {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        Book *book1 = [[Book alloc]init];
+        Book *book1 = [[Book alloc]init]; //인스턴스 메서드
         book1.name = @"햄릿";
         book1.genre = @"비극";
         book1.author=@"세익스피어";
@@ -646,8 +621,8 @@ int main(int argc, char * argv[]) {
 
 -(void)bookPrint {
     NSLog(@"Name: %@", name);
-    NSLog(@"Name: %@", genre);
-    NSLog(@"Name: %@", author);
+    NSLog(@"genre: %@", genre);
+    NSLog(@"author: %@", author);
 }
 
 @end
@@ -735,14 +710,14 @@ int main(int argc, char * argv[]) {
     }
     return self;
 }
-
 -(void)addBook:(Book *)bookObject {
     [bookList addObject:bookObject];   //받은 bookObject를 추가
 }
 -(NSString *)showAllBook {
+	//문자열합치기
     NSMutableString *strTemp = [[NSMutableString alloc]init];
    
-    for(Book *bookTemp in bookList) {
+    for(Book *bookTemp in bookList) { //bookTemp로 요소에 접근
         //누적시키기
         [strTemp appendString:@"Name: "];
         [strTemp appendString:bookTemp.name];
@@ -848,27 +823,6 @@ int main(int argc, char * argv[]) {
 
 ----------------------------
 //
-//  Book.m
-//  BookManager
-//
-//  Created by 조성동 on 2023/04/19.
-//
-
-#import "Book.h"
-
-@implementation Book
-@synthesize name,genre,author;
-
--(void)bookPrint {
-    NSLog(@"Name: %@", name);
-    NSLog(@"Name: %@", genre);
-    NSLog(@"Name: %@", author);
-}
-
-@end
-
--------------------------------
-//
 //  BookManager.h
 //  BookManager
 //
@@ -887,7 +841,7 @@ int main(int argc, char * argv[]) {
 -(NSString *)showAllBook;
 -(NSUInteger)countBook; //책 갯수
 -(NSString *)findBook:(NSString *)name; //책검색, 없으면 nil반환
--(NSString *)removeBook:(NSString *)name;
+-(NSString *)removeBook:(NSString *)name; //인자로 책이름을 받는다.
 
 @end
 
@@ -955,7 +909,7 @@ int main(int argc, char * argv[]) {
 }
 -(NSString *)removeBook:(NSString *)name {
     for(Book *bookTemp in bookList) {
-        if([bookTemp.name isEqualToString:name]) {
+        if([bookTemp.name isEqualToString:name]) { //이름이 같은걸 구해서 목록에서 제거
             [bookList removeObject:bookTemp];
             return name;
         }
@@ -1017,7 +971,7 @@ int main(int argc, char * argv[]) {
         else {
             NSLog(@"찾으시는 책이 없네요");
         }
-       
+        
         NSString *removeResult = [myBook removeBook:@"죄와 벌"];
         if(removeResult != nil) {
             NSLog(@"%@ 책을 지웠습니다.", removeResult);
@@ -1243,7 +1197,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 #import <Foundation/Foundation.h>
 
 @interface Book : NSObject
-
 //프로퍼티로 getter,setter자동
 //strong은 객체를 첨조하고있다.라는 의미
 @property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
@@ -1263,7 +1216,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 //
 
 #import "Book.h"
-
 @implementation Book
 @synthesize name,genre,author;
 
@@ -1291,6 +1243,7 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
     NSMutableArray *bookList;
 }
 
+//아래에 함수들이 구현되어있다.
 -(void)addBook:(Book *)bookObject;  //book객체를 인자로받는다
 -(NSString *)showAllBook;
 -(NSUInteger)countBook; //책 갯수
@@ -1386,8 +1339,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 @interface ViewController : UIViewController {
     BookManager *myBook; //전역변수로 만들기 위해 추가 (myBook을 다른곳에서도 사용하기 위해)
 }
-
-
 @end
 
 ---------------------------------
@@ -1401,11 +1352,11 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 #import "ViewController.h"
 
 @interface ViewController ()
-//import해줘야 된다
+//헤더부분을 import해줘야 된다
 #import "BookManager.h"
 #import "Book.h"
 
-@implementation ViewController
+@implementation ViewController //위에서 선언한 -> 안에는 BookManager라는 변수가 들어가있다.
 
 - (void)viewDidLoad { //뷰가 로딩되자마자 자동으로 실행되는 부분
                       //그래서 초기화 코드는 여기 넣으면된다
@@ -1445,7 +1396,7 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 //현재 화면 구성
 
 
-        전체 보기(button)
+        전체 보기(button)  //이거를 클릭한다
 
       --textview(전체보기 눌렸을 때 책목록 띄우게)
       |                               |
@@ -1459,12 +1410,12 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 //
 //  Created by 조성동 on 2023/04/19.
 //
-
+//여기는 헤더부분
 #import <Foundation/Foundation.h>
 
 @interface Book : NSObject
 
-//프로퍼티로 getter,setter자동
+//프로퍼티로 getter,setter자동으로 선언됨
 //strong은 객체를 첨조하고있다.라는 의미
 @property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
 @property (nonatomic, strong) NSString *genre;
@@ -1608,6 +1559,8 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 //이거를 main스토리보드에 끌어놓기(폰모양 맨위에 첫번째동그라미 선택
 //-> 우측속성상단에 젤끝에 show conntections inspector
 //-> 해당 resultTextView를 텍스트박스에 끌어놓으면 됨
+
+//또는 스토리보드에 있는 textView를 누르고 control누른상태에서 소스코드로 드래그하면 Name을 입력할수있다.그게 resultTextView이다.
 @property (nonatomic, strong) IBOutlet UITextView *resultTextView;
 
 //선언했으니 구현하러가자
@@ -1680,6 +1633,26 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 }
 
 @end
+
+================================================================
+//IBOutlet은 코드에 정의된 변수와 화면의 객체를 연결하는 것이고
+//IBAction은 Event가 일어난 경우 호출되는 Action을 정의해둔 것이다.
+
+//IBOutlet이나 IBAction태그를 통해 StoryBoard와의 연결고리를 담당한다.
+변수나 함수를 정의할 떄 앞에 @IBOutlet 또는 @IBAction 키워드를 작성해 StoryBoard에서
+버튼이나 레이블같은 컴포넌트와 연결이 가능하다.
+
+#)IBAction, IBOutlet의 정의
+일단, Action과 Outlet은 어느정도 의미가 짐작이 된다. 
+말 그대로 Action은 입력이 들어왔을때 어떤 행동을 할 지를 나타내고 Outlet은 데이터를 가져오는 것이다. 
+앞에 있는 IB는 Interface Builder의 약자이다. 즉 IBAction은 Interface Builder를 통해 받아온 정보로 Action을 수행하겠다는 의미.
+
+===================================================================
+//예시) 슬라이드 값을 반올림하여 변수에 저장
+@IBAction func sliderMoved(_ sender: UISlider) {
+	currentValue = lroundf(slider.value)
+}
+scoreLabel.text = String(currentValue)  // Label은 String 타입으로 currentValue가 Int형이므로 앞에 String을 해준다.
 
 ================================================================
 //textfield는 한줄만 입력 받는다
@@ -1970,7 +1943,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 @property (nonatomic, strong) NSString *name; //값에 동시에 접근할 필요가 업어서 non으로설정
 @property (nonatomic, strong) NSString *genre;
 @property (nonatomic, strong) NSString *author;
-
 -(void)bookPrint;
 
 @end
@@ -2007,7 +1979,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 @interface BookManager : NSObject{
     NSMutableArray *bookList;
 }
-
 -(void)addBook:(Book *)bookObject;
 -(NSString *)showAllBook;
 -(NSUInteger)countBook;
@@ -2109,7 +2080,6 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 @property (nonatomic, strong) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) IBOutlet UITextField *genreTextField;
 @property (nonatomic, strong) IBOutlet UITextField *authorTextField;
-
 //선언했으니 구현하러가자
 -(IBAction)showAllBookAction:(id)sender;
 
@@ -2225,7 +2195,7 @@ UIKit은 이를 만들어 unattached 상태로 만든다.
 
 #import <Foundation/Foundation.h>
 
-@interface Book : NSObject
+@interface Book : NSObject    //Book이라는 클래스는 아래의 변수들과 bookPrint라는 메서드를 가지고 있다.
 
 //프로퍼티로 getter,setter자동
 //strong은 객체를 첨조하고있다.라는 의미
