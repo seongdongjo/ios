@@ -282,7 +282,7 @@ yeonghee(nil) ---RC-1---->   Woman Instance(0x222...) RC=1
 이렇게 strong을 사용해서 순환참조에 문제가 생긴 경우를 강한순환참조라고 한다.
 
 3. weak, unowned
-해결은 weak와 unowned를 사용하면 된다.
+해결은 weak와 unowned를 사용하면 된다
 
 3-1 weak(약한참조)
 인스턴스를 참조할 시, RC를 증가시키지 않는다.
