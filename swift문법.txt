@@ -17,7 +17,7 @@ someInt = 1.1 //에러가 난다
    
 //UInt (부호없는정수형)
 var someUInt: UInt = 200
-someUnit = -200 //에러가난다    
+someUnit = -200 //에러가난다(부호를 붙이면)    
 
 //Float
 var someFloat: Float = 1.1
@@ -53,7 +53,7 @@ Set -> 같은 데이터 타입의 값을 순서없이 저장하는 리스트(중
 var numbers: Array<Int> = Array<Int>()
 numbers.append(1)
 numbers.append(2)
-numbers[0]
+numbers[0] //0번째 요소 출력
 numbers[1]
 
 //중간삽입
@@ -73,7 +73,7 @@ var dic: Dictionary<String, Int> = Dictionary<String, Int>()
 //간단하게
 var dic: [String: Int] = [:]
 var dic: [String: Int] = ["권태안" : 1]
-dic["김철수"] = 3 //키값은 김철수 값은 3
+dic["김철수"] = 3 //키값은 김철수, 값은 3
 dic //출력 -> ["권태안":1,김철수":3]
 
 dic["김민지"] = 6 //값변경
@@ -120,7 +120,7 @@ func greeting(friend: String, me:String="gunter") {
 greeting(friend: "Albert") //출력: Hello, Albert! I'm gunter
 
 
-#)전달인자 레이블사용(사용자가 명확하게 알수있는게 장점)
+#)전달인자 레이블사용(사용자가 명확하게 알수있는게 장점 - 변수명이 아니라 from, to로 지칭)
 func sendMessage(from myName: String, to name: String) -> String {
     return "Hello \(name)! I'm \(myName)"
 }
@@ -150,7 +150,6 @@ if age < 19 {
 else {
     print("성년자")
 }
-
 ---------
 let animal = "cat"
 if animal == "dog" {
@@ -234,7 +233,7 @@ var requiredName: String = optionalName //이렇게 하면 에러난다. require
 ------------------------
 #)옵셔널해제 방법
 1) 명시적 해제 첫번째방법(강제해제) //이방법은 위험하다 만약에 값이 nil인 옵셔널을 강제해제하면 프로그램이 에러가난다
-
+// 느낌표로 강제해제
 var number: Int? = 3
 print(number) //출력: Optional(3)
 print(number!) //출력: 3 (강제해제)
@@ -258,8 +257,8 @@ test() //출력: 5
 
 --------------------------
 #)묵시적 해제 -> 컴파일이 자동으로 해제
-let value: Int? = 6
-if value == 6 {
+let value: Int? = 6 //옵셔널값
+if value == 6 { //비교연산자사용시 포장지벗겨짐
     print("value가 6입니다.")
 } else {
     print("value가 6이 아닙니다.")
@@ -276,7 +275,8 @@ print(stringToInt + 1) //13
 struct User {
     var nickname: String
     var age: Int
-
+	
+	//인스턴스 변수들 출력
     func information() {
         print("\(nickname) \(age)")
     }
@@ -328,7 +328,7 @@ struct User {
     }
 }
 
-let user = User() //이때 init호출
+let user = User() //이때 init을 호출한다고 보면된다.
 
 ======================================
 class User {
@@ -339,7 +339,7 @@ class User {
         self.nickname = nickname
         self.age = age
     }
-    init(age: Int) {
+    init(age: Int) { //인자하나만 던지면 nickname은 alber로
         self.nickname = "ablert"
         self.age = age
     }
@@ -367,10 +367,9 @@ user3 = nil   //deint user
 ==================================================
 #)프로퍼티
 1. 저장 프로퍼티(인스턴스에 프로퍼티값이 저장된거)
-
 struct Dog {
     var name: String
-    let gender: String //상수는 값 변경불가
+    let gender: String //상수(let)는 값 변경불가
 }
 
 var dog = Dog(name :"gunter", gender: "Male")
@@ -379,7 +378,7 @@ print(dog)  //"Dog(name: "gunter", gender: "Male")\n"
 dog.name="권태안"
 dog.gender="Femal" //상수라 에러가 난다
 
-//구조체 변수타입을 상수로 선언하면 내부 프로퍼티도 상수로 다 바뀐다
+//구조체 변수타입을 상수(let)로 선언하면 내부 프로퍼티도 상수로 다 바뀐다
 let dog2 = Dog(name: "gunter", gender: "male")
 dog2.name = "권태안"  //에러가난다.
 ==================================================
@@ -433,10 +432,10 @@ stock.averagePrice  //1000
 class Account {
     var credit: Int = 0 {
         //소괄호 이름 지정
-        willSet {
+        willSet { //값이 저장되기 직전에 호출하기때문에 credit에는 안들어간다.
             print("잔액이 \(credit)원에서 \(newValue)원으로 변경될 예정입니다.") //매개변수 정하지않으면 자동으로 newValue
         }
-        didSet {
+        didSet { //값이 저장되있기때문에 credit에 값이 들어가있다.
             print("잔액이 \(oldValue)원에서 \(credit)원으로 변경되었습니다.") //매개변수 지정하지않으면 자동으로 oldValue
         }
     }
@@ -447,7 +446,7 @@ account.credit = 1000 //잔액이 0원에서 1000원으로 변경될 예정입�
                       //잔액이 0원에서 1000원으로 변경되었습니다.
                      
 =================================
-#) 타입프로퍼티(인스턴스생성없이 접근)
+#) 타입프로퍼티(인스턴스생성없이 접근 - static 선언했기때문에)
 struct SomeStructure {
     static var storedTypeProperty = "Some value."
     static var computedTypeProperty: Int {
@@ -526,7 +525,7 @@ bicycle.currentSpeed=15.0  //값 변경가능
 //오버라이딩
 class Train: Vehicle {
     override func makeNoise() {
-        super.makeNoise()
+        super.makeNoise() //부모의 함수는 그대로 호출
         print("choo choo")
     }
 }
@@ -536,6 +535,17 @@ train.makeNoise() // speaker on choo choo -> 필요에따라 super를 붙여서 
 
 ======================================================
 #)프로퍼티 오버로딩
+class Vehicle {
+   //final var currentSpeed = 0.0 -> 재정의 할 수없다. override var current ~ 불가능
+    var currentSpeed = 0.0
+    var description: String {
+        return "traveling at \(currentSpeed) miles per hour"
+    }
+    func makeNoise() {
+        print("speaker on")
+    }
+}
+
 class Car: Vehicle {
     var gear = 1
     override var description: String {
@@ -550,7 +560,7 @@ print(car.description) // traveling at 30.0 miles per hour in gear 2
 
 ======================================================
 class AutomaticCar: Car {
-    override var currentSpeed: Double {
+    override var currentSpeed: Double { //didSet을 사용함으로써 변수 오버라이딩
         didSet {
             gear = Int(currentSpeed / 10) + 1
         }
@@ -573,7 +583,7 @@ class Movie: MediaItem { //상속
     var director: String
     init(name: String, director: String) {
         self.director = director
-        super.init(name: name)
+        super.init(name: name) //네임은 부모에서 초기화!!!!!
     }
 }
 
@@ -645,7 +655,7 @@ func guardTest(value: Int) {
     print("안녕하세요")
 }
 
-guardTest(value: 2) //아무것도 출력안됨 guard문에 막혀서
+guardTest(value: 2) //아무것도 출력안됨 guard문에 막혀서 - else문
 
 //guard문을 통해 옵셔널 바인딩
 func guardTest(value: Int?) {
@@ -653,7 +663,7 @@ func guardTest(value: Int?) {
     print(value)
 }
 
-guardTest(value: nil) //막혀서 출력이 안된다
+guardTest(value: nil) //막혀서 출력이 안된다 - else문
 
 ==========================================================
 #)프로토콜
@@ -714,7 +724,7 @@ class SomeClass: SomeProtocol5 {
 
 ====================================
 #)익스텐션
-extension Int {
+extension Int { //Int 타입에 접근할때 메서드를 내가만든 메서드를 쓰고싶을 때
     var isEven: Bool {
         return self % 2 == 0 //짝수인지 판단
     }
@@ -821,14 +831,16 @@ print(company.developer) //nil
 -------------------
 struct Developer {
     let name: String
+	//여기서 init이 생략
 }
 
 struct Company {
     let name: String
-    var developer: Developer?
+    var developer: Developer? //Developer는 구조체이다. 안에 변수 다시 접근가능하다.
+	//여기서 init생략
 }
 
-var developer = Developer(name: "han")
+var developer = Developer(name: "han") //일단 Developer먼저 선언
 var company = Company(name: "Gunter", developer: developer)
 print(company.developer) //옵셔널로 감싸진 developer출력
 print(company.developer.name) //에러가 난다. -> developer는 옵셔널로 감싸져있어서 접근이 불가능
@@ -1050,7 +1062,7 @@ func sayHello(name: String) {
 	print("Hello, \(name)")
 }
 
-sayHello(name: "Sodeul")
+sayHello(name: "Sodeul") // to == name
 
 ----------------------------------
 3) 파라미터를 받지 않는 경우
@@ -1089,7 +1101,7 @@ func sayHello(name: String) {
 }
  
 var name: String = "Sodeul"
-sayHello(name: name)
+sayHello(name: name) //이렇게 파라미터로 넘기면 함수내부에서 재정의 못한다.
 name = "Somaker"
 print("Check #1 \(name)")
 
@@ -1138,7 +1150,7 @@ func sayHello(name: inout String) {}
 #)함수호출
 함수호출 할 때는 Argument 앞에 & 붙여주기
 
-sayHello(name: &name)
+sayHello(name: &name) //이렇게하면 함수내부에서도 값을 재정의 할 수있다.
 ------------------------------
 //예제
 func sayHello(name: inout String) {
@@ -1155,14 +1167,13 @@ print(name) //Somaker 가 출력된다.
 형식: (name: Type = 기본값)
 파라미터의 Type 옆에  = (등호)를 넣어서 기본 값을 지정한다.
 
-파라미터에 기본값을 설정한 경우 호출 시 파라미터를 생략해도된다.
-
 #) 예제를 살펴보자 -> 아래처럼 = 를 통해 기본 값을 설정 할 수 있다.
 func sayHello(name: String = "Stranger") {
 	print("Hello, \(name)")
 }
-
+//파라미터에 기본값을 설정한 경우 호출 시 파라미터를 생략해도된다.
 sayHello()  //"Hello, Stranger"
+
 sayHello(name: "Sodeul") //"Hello, Sodeul"
 
 //여기서 중요한 것은 기본값이 있는 파라미터는 생략이 가능하다.
@@ -1219,7 +1230,7 @@ func sayHello(name: String, age: Int) { }     // sayHello(name:age:)
 2) 파라미터가 없는 함수표기법
 함수이름만 덩그라니 쓰면 끝임!!!  -> 함수표기법에서는 파라미터가 없을 시 호출할때 ()를 생략한다.
 
-func sayHello() {}           //sayHello
+func sayHello() {}           //sayHello -> 이렇게 호출도가능하다
 func sayHelloToSodeul() {}   //sayHelloToSodeul
 
 ========================================================
@@ -1260,7 +1271,7 @@ usingArgumentLabelFunc(to: "나리")
 // 3. 전달인자 레이블을 와일드카드 식별자로 사용하는 함수 - 함수호출 시 자바에서처럼 호출
 func usingWildCardLabelFunc(_ name: String) {
 }
-// 함수호출
+// 함수호출(파라미터하나면 아래처럼 레이블 생략가능)
 usingWildCardLabelFunc("나리")
 // 함수이름: usingWildCardLabelFunc(_:)
 
@@ -1371,7 +1382,7 @@ Success!sodeul
 func testDefer() {
 	print("Check #1")
 	
-	defer { print("defer #1") }
+	defer { print("defer #1") } //즉, 여기는 마지막에 출력된다는 말이다.(단, 아래와 같은 경우는 예외이다)
 	
 	print("Check #2")
 }
@@ -1420,6 +1431,7 @@ defer #1
 
 =============================================================
 #) defer는 중첩해도 사용가능하며, 실행순서는 가장 바깥쪽 defer부터 실행된다.
+//즉, 가장 먼저 읽은 defer가 가장 마지막에 실행이 된다.
 
 func testDefer() {
     defer {
@@ -1529,6 +1541,244 @@ closure()
 })()
 
 =========================================================================
+//클로저는 1급 객체로, 변수 형태로 저장 할 수 있고 함수의 파라미터로도 넘길 수 있다.
+//변수나 상수에 저장 및 할당가능하다.
+let closureSample = {(city:String) -> String in
+	"I'm in \(city)"
+}
+//할당된 변수로 클로저 실행
+closureSample("서울")
+=========================================================================
+2. 함수의 파라미터로 전달이가능하다.
+// 상수에 클로저 할당
+let sayHello = { (name: String) -> String in
+	"Hello \(name)"
+}
+
+// 상수에 클로저 할당
+let sayGoodbye = { (name: String) -> String in
+	"Goodbye \(name)"
+}
+
+// 함수의 파라미터로 클로저를 전달받도록 정의
+func greet(name: String, sayWhat: (String) -> String) {
+	sayWhat(name)
+}
+
+// 함수 파라미터로 클로저 전달
+// 리턴값 : Hello 이름
+greet(name: "Jaebin", sayWhat: sayHello) //sayHello라는 상수(클로저)를 파라미터로 넘긴다.
+
+// 함수 파라미터로 클로저 전달
+// 리턴값 : Goodbye 이름
+greet(name: "Jaebin", sayWhat: sayGoodbye) //sayGoodby라는 상수(클로저)를 파라미터로 넘긴다.
+
+// 상수 클로저를 전달하지 않고 직접 클로저를 구현해 전달 가능
+greet(name: "Jaebin", sayWhat: {( displayName: String) -> String in
+	"How are you \(displayName)?"
+})
+=========================================================================
+3. 함수에서 리턴이 가능하다.
+
+// 함수의 리턴값으로 클로저 반환
+func saySomething(word: String) -> (String) -> String { //화살표가 2개이다.
+	return { (word) -> String in
+    	"I said \(word)"
+    }
+}
+
+// 리턴된 클로저를 상수에 할당
+let say = saySomething("Hello")
+
+// 클로저 호출
+// 리턴값 : I said Hello
+say()
+=========================================================================
+//근데, 이렇게 복잡한 클로저는 왜쓰는 걸까
+//축약이 가능하기 때문
+
+1. 반환타입생략 
+// 축약 전
+func saySomething(word: String) -> (String) -> String {
+	return { (word) -> String in
+    	"I said \(word)"
+    }
+}
+
+// 축약 후
+func saySomething(word: String) -> (String) -> String {
+	return { (word) in		// 이부분에서 화살표,String이 생략되있다.
+    	"I said \(word)"
+    }
+}
+
+2. 트레일링클로저
+마지막 호출 방법인 직접 클로저를 작성하는 방식에서 축약이 가능하다.
+클로저가 함수의 마지막 매개변수일 시 이름을 생략하고 클로저를 구현할 수 있다.
+
+// 축약 전(파라미터의 마지막이 클로저일 때 이름 생략가능 - sayWhat)
+greet(name: "Jaebin", sayWhat: {( displayName: String) -> String in
+	"How are you \(displayName)?"
+})
+
+// 축약 후
+greet(name: "Jaebin") {( displayName: String) -> String in
+	"How are you \(displayName)?"
+}
+
+3. 인자명 단축
+예시에서는 클로저로 넘기는 인자명이 word 로 짧지만 긴 인자명일 수 있다.
+이 때, 인자명을 모두 적지 않고 아래와 같이 축약이 가능하다.
+
+// 축약 전
+func saySomething(word: String) -> (String) -> String {
+	return { (word) -> String in
+    	"I said \(word)"
+    }
+}
+
+// 축약 후
+func saySomething(word: String) -> (String) -> String {
+	return { (word) -> String in
+    	"I said \($0)" //이렇게 ($0)처럼 생략이 가능하다.
+    }
+}
+인자 순서대로 $0, $1, $2.. 와 같이 번호가 자동으로 매겨져 이를 이용해 인자명을 단축할 수 있다.
+=========================================================================
+//클로저가 아니라 함수에 대해 다시 알아보자
+func helo(name: String, time: Int) -> String {
+	var String = ""
+	for _ in 0..<time {
+		string += "\(name)님 안녕하세요"
+	}
+	return string
+}
+
+//호출
+hello(name: :"전수열", time:3)
+------------------------
+//만약 함수 호출할때 파라미터이름과 함수내부에서 사용하는 파라미터 이름을 다르게 쓰고 싶을 때
+func hello(to name: String, numberOfTimes time: Int) {
+	//함수내부에서는 name고 time을 사용한다.
+	for _ in 0..<time {
+		print(name)
+	}
+}
+//함수호출
+hello(to:"전수열",numberOfTimes:3) 
+-----------------------
+//파라미터 이름을  _ 로 정의하면 함수를 호출할 때 파라미터 이름을 생략할 수 있게 된다.
+func hello(_ name: String, time: Int) {
+	//..
+}
+//함수호출
+hello("전수열",time:3) //name생략
+-----------------------
+//파라미터에 기본값 지정가능 - 기본값이 있으면 해당 파라미터는 생략이 가능하다.
+func hello(name: String, time: Int = 1) {
+	//..
+}
+//함수호출
+hello("전수열")
+------------------------
+// ...을 사용하면 개수가 정해지지 않은 파라미터를 받을 수 있다.
+func sum(_ numbers: Int...) -> Int {
+	var sum = 0
+	for number in numbers {
+		sum += number
+	}
+	return sum
+}
+//함수호출
+sum(1,2) //레이블 생략(_) 및 인자가 하나이기 때문에 파라미터명없이 바로 전달가능 
+sum(3,4,5)
+---------------------------
+//함수안에 함수를 작성할 수 있다.
+func hello(name: String, time: Int) {
+	func message(name:String) -> String {
+		return "\(name)님 안녕하세요!"
+	}
+	for _ in 0..<time { //time만큼 돌면서 message함수 호출
+		print(message(name:name))
+	}
+}
+//함수호출
+hello("전수빈",3)
+------------------------------
+//함수안에 정의한 함수를 반환 할 수도 있다.
+func helloGenerator(message: String) -> (String) -> String{
+	func hello(name: String) -> String {
+		return name+message
+	}
+	return hello //이렇게 정의한 함수를 반환 할수 도 있다.
+}
+
+let hello = helloGenerator(message: "님 안녕하세요!")
+hello("전수빈") //위에서 message를 가지고 있다가 그대로 hello호출할 때 쓴다. 
+-------------------------------
+//위에서 핵심은 helloGenerator() 함수의 반환타입이 (String) -> String 이라는 것이다.
+//즉, helloGenerator()는 문자열을 받아서 문자열을 반환하는 함수(return hello)를 반환하는 함수이다.
+
+//만약 helloGenerator()안에 정의한 hello()함수가 여러개의 파라미터를 받는다면 이렇게 써야한다.
+func helloGenerator(message: String) -> (String, String) -> String { //이렇게 (String, String)
+	func hello(firstName: String, lastName: String) -> String {
+		return lastName + firstName + message
+	}
+	return hello
+}
+let hello = helloGenerator(message: "님 안녕하세요")
+hello("수빈","전")
+//즉, (String,String) -> String은 문자열 두개를 받아서(hello) 문자열을 반환하는 의미이다.
+===========================================================================
+//클로저
+//이렇게만 보면 별로 간략하지 않은거 같은데...
+func helloGenerator(message: String) -> (String,String) -> String {
+	return {(firstName: String, lastName: String) -> String in //클로저는 중괄호가 감싸져있다.
+		return lastName + firstName + message 
+	}
+}
+
+------------------------------------------
+//이렇게 생략할 수 있다.
+func helloGenerator(message: String) -> (String,String) -> String {
+	return {firstName, lastName in    //즉 여기서 String을 다 생략했다 위에서 (String,String) -> String 으로 타입추론이 가능하기 때문이다.
+		return lastName + firstName + message
+	}
+}
+-------------------------------------------
+//더 생략할 수 있다.
+func helloGenerator(message: String) -> (String,String) -> String {
+	return {
+		return $1 + $0 + message   //firstName,lastName이 String이라서 바꿔쓰기 가능
+	}
+}
+
+------------------------------------------
+//근데 클로저내부의 코드가 한 줄이라면 return 까지 생략할 수 있다.
+func helloGenerator(message: String) -> (String,String) -> String {
+	return {$1 + $0 + message}
+}
+------------------------------------------
+let numbers = [1, 3, 2, 6, 7, 5, 8, 4]
+
+let sortedNumbers = numbers.sort { $0 < $1 }
+print(sortedNumbers) // [1, 2, 3, 4, 5, 6, 7, 8]
+
+let evens = numbers.filter { $0 % 2 == 0 }
+print(evens) // [2, 6, 8, 4]
+------------------------------------------
+//클로저 활용
+클로저는 Swift의 굉장히 많은 곳에서 사용됩니다. 
+바로 위에서 예시를 든 것처럼 sort()나 filter()와 같은 배열에 많이 쓰입니다.
+대표적인 메서드로는 sort(), filter(), map(), reduce()가 있습니다. 
+sort()와 filter()는 바로 위에서 써봤으니 map()과 reduce()에 대해서 살펴볼까요?
+
+map()은 파라미터로 받은 클로저를 모든 요소에 실행하고, 그 결과를 반환합니다. 
+예를 들어, 정수 배열의 모든 요소들에 2를 더한 값으로 이루어진 배열을 만들고 싶다면, 이렇게 작성할 수 있습니다.
+
+let arr1 = [1,3,6,2,7,9]
+let arr2 = arr1.map($0 * 2} //[2,6,12,4,14,18]
+=========================================================================
 //Outlet, Action을 이용하면 코드에서 UI접근이 가능하다.
 //스토리보드에서 버튼요소 클릭하고 우클릭해서 컨트롤러안에 끌어놓으면
 //설정 할 수 있는 항목이 뜬다.
@@ -1548,6 +1798,21 @@ class ViewController: UIViewController {
     }
     
 }
+======================================================================
+//프로젝트 생성 시에 product name이 앱이름이 된다.
+//deployment Target은 Minimum OS 지원 버전이라고 생각하면 된다.
+//앱에서 어떤 기능을 사용할지에 따라서 ios deployment Target이 달라질 수 있다.
+예를들어 앱 실행 중에 앱의 평점을 매길수 있는 SKStoreReviewController 같은 경우는 ios 10.3 버전부터 지원하는 기능이다.
+
+xcode에 보면 왼쪽에 PROJECT 따로 TARGET따로 있는데 거기에 각각 ios deployment target이 있는데
+TARGETS이 PROJECT를 OVERRIDE 한다.(즉, TARGETS 가 우선순위가 짱이다)
+즉, 버전이 다르다면 TARGETS쪽의 ios deployment target이 Minimum 버전이 된다.
+
+baseSDK는 라이브러리, 프레임워크기반을 의미. maximum버전으로 생각하면 된다.
+Deployment target은 밑으로 어느버전까지 지원하는지. minimum버전으로 생각하면 된다.
+
+즉, ios deployment target 값을 9.0 이상 설정하면 App은 9.0 이상에서만 실행가능하다.
+
 ======================================================================
 콘텐츠고유사이즈(가로,세로)가 늘어나는데 이때 늘어나는저항을 content hugging이라하고
 더 줄어들게되는것에 저항하는것을 content compression resistance라고한다
@@ -1632,7 +1897,7 @@ class ViewController: UIViewController {
         // 0~4까지의 랜덤한 수를 만들어낸다
         //배열의 인덱스 요소로 접근해야하니까 int형으로 치환
         let random = Int(arc4random_uniform(5))
-        let quote = quotes[random]
+        let quote = quotes[random] //랜덤으로 요소 접근
         self.quoteLabel.text = quote.contents
         self.nameLabel.text = quote.name
     }
@@ -1879,7 +2144,6 @@ class CodePushViewController: UIViewController {
 
 
 
-
 //이제 마지막으로 "코드로 present'를 해보자
 먼저 +버튼 - ViewController 추가 - label, button추가 - cocoa touch class추가 (이름은 CodePresentViewController)
 - custom class에 CodePresentController 로 이름변경
@@ -1931,6 +2195,20 @@ class CodePresentViewController: UIViewController {
 }
 
 =================================================
+//위에서 presentingViewController dismiss하는이유
+//회원가입이 완료되거나(완료 후 홈으로), 긴 Segue로 연결된 ViewController를 한꺼번에 dismiss해야한다.(처음으로 가기위해)
+그러면 그냥 마지막페이지에서 첫 페이지를 present하면 안되나?
+
+- 여러페이지를 present한 경우 지금까지 거쳐온 페이지들은 바로 뒤에 존재하고 있는상태이다.
+  이는 resource를 소모하고 있는 상태이다.그렇게 때문에 한꺼번에 여러페이지를 dismiss하는 것이 목적이다.
+  
+#)예시 - 4페이지를 dismiss한것이다.
+@IBAction func goFirstPage(_ sender: Any) {
+	self.presentingViewController?.presentingViewController?.
+	presentingViewController?.preseningViewController?.dismiss(animated: true, completion: nil)
+}
+
+=================================================
 ViewController Life Cycle
 - Appearing: 뷰가 화면에 나타나는 중
 - Appeared: 뷰가 화면에 나타나는게 완료된 상태
@@ -1939,8 +2217,8 @@ ViewController Life Cycle
 
 viewDidLoad()
 - 뷰 컨트롤러의 모든 뷰들이 메모리에 로드됐을때 호출
-- 메모리에 처음 로드될때 한번만 호출
-- 보통 딱 한번 호출될 행위들을 이 메소드안에 정의함
+- 메모리에 처음 로드될때 한번만 호출!!!!!
+- 보통 딱 한번 호출될 행위들을 이 메소드안에 정의함!!!!!
 - 뷰와 관련된 추가적인 초기화 작업, 네트워크호출(일회성작업)
 
 viewWillAppear()
@@ -2102,7 +2380,7 @@ class CodePresentViewController: UIViewController {
     
     @IBOutlet weak var nameLabel: UILabel!  //끌어다놓은 라벨
     var name: String?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -2110,6 +2388,7 @@ class CodePresentViewController: UIViewController {
     @IBAction func tapBackButton(_ sender: UIButton) {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
+	
 }
 
 
@@ -2308,7 +2587,7 @@ class CodePresentViewController: UIViewController {
 
 
 //다시 viewcontroller를 보자
-class ViewController: UIViewController, SendDataDelegate {
+class ViewController: UIViewController, SendDataDelegate { //프로토콜 사용
 
     @IBOutlet weak var nameLabel: UILabel!
 
@@ -2370,7 +2649,6 @@ class ViewController: UIViewController, SendDataDelegate {
 //실행을 해보면 viewcontroller에서 "코드로 present"를 클릭하고 backbutton을 클릭하면
 //viewcontroller 라벨에 받은 Gunter 라고 적혀있다.
 //이렇게 delegate패턴을 이용하면 이전화면으로 데이터를 전달할 수 있다.
-
 =========================================================
 #)이제 segueway 방식에서의 값을 전달해보자
 //먼저, seguepushcontroller에서 label을 하나추가한다.
@@ -2459,7 +2737,6 @@ class ViewController: UIViewController, SendDataDelegate {
         guard let viewController = self.storyboard?.instantiateViewController
         (identifier: "CodePresentViewController") as? CodePushViewController else {return}
         viewController.modalPresentationStyle = .fullScreen
-
         viewController.name = "Gunter"
         
         //다른화면이 호출되기 전에 delegate를 위임받자(위임받을려면 클래스옆에 프로토콜채택해야됨)

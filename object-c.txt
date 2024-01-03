@@ -3048,10 +3048,7 @@ slider  label(화면전환빠르기수치)
 -(IBAction)toggleAction:(id)sender;
 -(IBAction)changeSpeedAction:(id)sender;
 
-
 @end
-
-
 --------------------------------------------
 //
 //  ViewController.m
